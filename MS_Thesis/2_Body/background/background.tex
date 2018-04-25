@@ -20,17 +20,11 @@ V_{\pi}({s_0}) = E_{\pi}[\sum^{\infty}_{i=0}\gamma^t R(s_{t_i})|s_{t_0}=s_0] &=&
 						&=& \omega^T E_{\pi}[\sum^\infty_{i=0}\gamma^t f(s_{t_i})|s_{t_0}=s_0]
 \end{eqnarray}
 
-Define $\mu_{\pi}$ as the expected features of policy $\pi$:
-\begin{equation}
-\centering
-\mu_{\pi} = E_{\pi}[\sum^\infty_{i=0}\gamma^t f(s_{t_i})|s_{t_0}=s_0]
-\end{equation}
-
-Given a policy $\pi$, then $\mu_\pi$ can be solved through Monte Carlo method, or value iteration, or linear programming. If expert has a weight vector $\omega_E$ and a policy $\pi_E$, the expected features of expert's policy $\mu_E$ can be expressed in the same way. However, practically only a limited amount of demonstrations will be provided by the expert. Define $\hat{\mu}_E$ as the expected features of expert's m trajectories. If m is large enough, $\mu_E$ can be approximated by $\hat{\mu}_E$.
+Define $\mu_{\pi}= E_{\pi}[\sum^\infty_{i=0}\gamma^t f(s_{t_i})|s_{t_0}=s_0]$ as the expected features of policy $\pi$. Given a policy $\pi$, then $\mu_\pi$ can be solved through Monte Carlo method, or value iteration, or linear programming. If expert has a weight vector $\omega_E$ and a policy $\pi_E$, the expected features of expert's policy $\mu_E$ can be expressed in the same way. However, practically only a limited amount of demonstrations will be provided by the expert. Define $\hat{\mu}_E$ as the expected features of expert's m trajectories. If m is large enough, $\mu_E$ can be approximated by $\hat{\mu}_E$.
 \begin{eqnarray}
 \centering
 E[\sum_{i=1}^{i=m}\sum_{s^{(i)}_{t_j}\in \tau_i}\gamma^j R(s^{(i)}_{t_j})] 
-&=& E[\sum_{i=1}^{i=m}\sum_{s^{(i)}_{t_j}\in \tau_i}\gamma^j \omega^Tf(s^{(i)}_{t_j})]\nonumber\\ 
+= E[\sum_{i=1}^{i=m}\sum_{s^{(i)}_{t_j}\in \tau_i}\gamma^j \omega^Tf(s^{(i)}_{t_j})]
 &=& \omega^T E[\sum_{i=1}^{i=m}\sum_{s^{(i)}_{t_j}\in \tau_i}\gamma^j f(s^{(i)}_{t_j})]\nonumber\\ 
 &=& \omega^T \hat{\mu}_E 
 \end{eqnarray}
@@ -49,7 +43,6 @@ The optimal $\omega$ is used to find the corresponding optimal policy $\pi_{i}$ 
 
 %The non-determinism of probabilistic systems including DTMC enables the modeling of asynchronous parallel composition\cite{kwiatkowska2002prism}. 
 Probabilistic model checking can be used to verify properties of a stochastic system such as ``is the probability that the agent reaches the unsafe area within 10 steps smaller than 5\%?''. \emph{Probabilistic Computation Tree Logic} (PCTL)~\cite{Hansson1994} allows for probabilistic quantification of those properties. The syntax of PCTL includes state formulas and path formulas~\cite{kwiatkowska2002prism}. A state formula $\phi$ asserts property of a single state $s\in S$ whereas a path formula $\psi$ asserts property of a trajectory. 
-
 \begin{eqnarray}
 \centering
 \phi &::=& true\ |\ l\ |\ \neg \phi_i\ |\ \phi_i \land \phi_j\ |\ P_{\Join p^*}[\psi]\label{eq:sec2_statef}\\
@@ -80,6 +73,7 @@ The satisfaction relation $\models$ between trajectory $\tau$ and path formula $
 \tau&\models& \phi_1 W^{\leq k}\phi_2\qquad\ iff\ \tau \models \phi_1 U^{\leq k}\phi_2\ or\ \forall i\leq k, s_{t_i}\models \phi_1)
 \end{eqnarray} 
 
+In this paper a third-party probabilistic model checking tool, PRISM~\cite{kwiatkowska2002prism}, is used. It can take a description of a system, which is a DTMC in the dissertation, with a set of PCTL specifications as inputs, then answers which states of the system satisfy each specification. This is a symbolic model checker~\cite{fujita1997multi} which uses binary decision diagram (BDD) and multi-terminal BDDs (MTBDDs) as the underlying data structures. The tool reduces the verification problem to reachability-based computation and numerical calculation. The data structures can help the tool perform efficient and fast computation on large, structured models~\cite{kwiatkowska2002prism}. 
 \section{Counterexample}
 One major strength of probabilistic model checking techniques is to generate counterexamples in case a temporal logic property is violated~\cite{4770111}. Counterexample can be viewed as a proof of the violation. In this thesis, it is used a demonstration of unsafe behaviors.
 
