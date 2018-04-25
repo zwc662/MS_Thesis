@@ -1,0 +1,32 @@
+
+\begin{table}[h]
+\begin{center}
+\caption{In cart pole environment, given the same $\mu_E$ from successful and safe expert demonstrations along with different safety specifications, Safety-Aware Apprenticeship Learning algorithm can output different policies with varied bias on safety and performance. But all learnt policies are safe with respect to their safety specifications. }
+\begin{tabular}{llll}
+\hline
+\small{Safety Constraints($p^*$)\qquad}  &\small{Model Checking Result\qquad} &\small{Average Steps}  &\small{Unsafe Rate}\\
+\hline
+1.0 &0.1553& 129.015 &  0.278\\
+\hline
+0.12 & 0.04675& 98.858 & 0.003\\
+\hline
+0.10 & 0.02508 &196.263 & 0.023\\
+\hline
+0.08 &0.0714& 157.303 & 0.008\\
+\hline
+0.06 & 0.04228& 103.674,& 0.085\\
+\hline
+0.04 &0.029599& 109.304 & 0.196\\
+\hline
+0.03 &0.02827& 184.618 & 0.00\\
+\hline
+0.02 &0.01186 & 31.716 & 0.005\\
+\hline
+0.01 & 0.00021 &  9.366 & 0.0\\
+\hline
+\label{tab:cartpole0}
+\end{tabular}
+\end{center}
+\end{table}
+
+

@@ -1,0 +1,108 @@
+\section{Markov Decision Process}
+\begin{definition}
+\textbf{Markov Decision Process (MDP)} is a tuple $(S,$ $A,$ $T,$ $\gamma,$ $s_0,$ $R)$, where $S$ is a finite set of states; $A$ is a set of actions; $T: S\times A\times S\rightarrow [0, 1]$ is a transition function describing the probability of transitioning from one state $s\in S$ to another $s'\in S$ by taking action $a\in A$ in state $s$; $R: S\to \mathbb{R}\ $is a reward function which maps each state $s\in S$ to a real number indicating the reward of being in state $s$; $s_0\in S$ is the initial state; $\gamma \in [0, 1)$ is a discount factor which describes how future rewards attenuate when a sequence of transitions is made.
+\end{definition}
+A policy $\pi$ for an MDP $M$ induces a Discrete-Time Markov Chain (DTMC) $M_{\pi}=(S, T_\pi, s_0)$, where $T_\pi:S\times S\to [0, 1]$ is the probability of transitioning from a state $s$ to another state in one step. By making a sequence of decisions by following policy $\pi$, the agent shall traverse a trajectory $\tau = s_{t_0}\xrightarrow{T_\pi(s_{t_0}, s_{t_1})>0} s_{t_1}\xrightarrow{T_\pi(s_{t_1}, s_{t_2})>0} s_{t_2}, ...$, is a sequence of states where $s_{t_i}\in S$. The accumulated reward of such trajectory $\tau$ is $\sum_{i=0}^\infty \gamma^i R(s_{t_i})$. The value function $V_\pi: S\to \mathbb{R}$ measures the expectation of accumulated reward $E[\sum\limits_{i=0}^{\infty}\gamma^i R(s_{t_i})]$ starting from a state $s$ and following policy $\pi$. 
+
+According to \cite{bellman}, a policy $\pi$ is optimal for MDP M if:
+\begin{equation}
+\centering
+\forall s\in S, \pi(s)\in argmax_{a\in A}  \sum_{s'\in S} T(s, a, s')V_{\pi}(s')
+\end{equation}
+
+
+\emph{Inverse reinforcement learning}~\cite{Ng:2000:AIR:645529.657801} assumes that a learning agent is provided with a set of m trajectories $E=\{\tau_0, \tau_1, ..., \tau_{m-1}\}$ from expert. The goal is to find a function $R$ that can generate optimal behavior similar to $E$. 
+
+\emph {Apprenticeship learning}~\cite{Abbeel:2004:ALV:1015330.1015430} aims at producing a policy which performs almost as well as the expert without guaranteeing to recover the reward function. It's assumed that reward function is the result of linear combination $R(s) = \omega^Tf(s)$, where $f:S \to [0,\ 1]^k$ is a vector of feature functions on S and $\omega \in [0, 1]^k \wedge ||\omega||_2\leq 1$, is a weight vector. Feature function $f$ is known by both expert and the learning agent. Given some weight vector $\omega$, its corresponding reward function R is known and optimal policy $\pi$ can be solved. The expectation of values of the initial states distributed in D can be expressed as:
+\begin{eqnarray}
+\centering
+V_{\pi}({s_0}) = E_{\pi}[\sum^{\infty}_{i=0}\gamma^t R(s_{t_i})|s_{t_0}=s_0] &=& E_{\pi}[\sum^{\infty}_{i=0}\gamma^t \omega^Tf(s_{t_i})|s_{t_0}=s_0]\nonumber\\
+						&=& \omega^T E_{\pi}[\sum^\infty_{i=0}\gamma^t f(s_{t_i})|s_{t_0}=s_0]
+\end{eqnarray}
+
+Define $\mu_{\pi}$ as the expected features of policy $\pi$:
+\begin{equation}
+\centering
+\mu_{\pi} = E_{\pi}[\sum^\infty_{i=0}\gamma^t f(s_{t_i})|s_{t_0}=s_0]
+\end{equation}
+
+Given a policy $\pi$, then $\mu_\pi$ can be solved through Monte Carlo method, or value iteration, or linear programming. If expert has a weight vector $\omega_E$ and a policy $\pi_E$, the expected features of expert's policy $\mu_E$ can be expressed in the same way. However, practically only a limited amount of demonstrations will be provided by the expert. Define $\hat{\mu}_E$ as the expected features of expert's m trajectories. If m is large enough, $\mu_E$ can be approximated by $\hat{\mu}_E$.
+\begin{eqnarray}
+\centering
+E[\sum_{i=1}^{i=m}\sum_{s^{(i)}_{t_j}\in \tau_i}\gamma^j R(s^{(i)}_{t_j})] 
+&=& E[\sum_{i=1}^{i=m}\sum_{s^{(i)}_{t_j}\in \tau_i}\gamma^j \omega^Tf(s^{(i)}_{t_j})]\nonumber\\ 
+&=& \omega^T E[\sum_{i=1}^{i=m}\sum_{s^{(i)}_{t_j}\in \tau_i}\gamma^j f(s^{(i)}_{t_j})]\nonumber\\ 
+&=& \omega^T \hat{\mu}_E 
+\end{eqnarray}
+
+The algorithm proposed by Abbeel and Ng~\cite{Abbeel:2004:ALV:1015330.1015430} starts with a random policy $\pi_0$ and its expected features $\mu_{\pi_0}$. Assuming that in iteration $i$, a set of $i$ candidate policies $\Pi=\{\pi_0, \pi_1, ..., \pi_{i-1}\}$ and their corresponding expected features $\{\mu_\pi|\pi\in\Pi\}$ have been found, the algorithm solves the following optimization problem.
+\begin{equation}
+\delta = \max\limits_{\omega}\min\limits_{\pi\in\Pi}\ \omega^T(\hat{\mu}_E - \mu_{\pi})\qquad s.t.\:||\omega||_2\leq 1 
+\label{eq:sec1_1}
+\end{equation}
+The optimal $\omega$ is used to find the corresponding optimal policy $\pi_{i}$ and the expected features $\mu_{\pi_i}$. If $\delta\leq\epsilon$, then the algorithm terminates and $\pi_{i}$ is produced as the output. Otherwise, $\mu_{\pi_i}$ is added to the set of features for the candidate policy set $\Pi$ and the algorithm continues to the next iteration. 
+
+\section{Probabilistic Model Checking}
+%\begin{definition}
+%\textbf{Discrete-Time Markov Chain (DTMC)} is a tuple $(S,$ $P,$ $s_0,$ $AP,$ $L)$ where $S$ is a finite set of states; $P:S\times S\to [0, 1]$ is the probability of transitioning from a state s to another state s' in one step; $s_0\in S$ is the initial state; $AP = \{l_0, l_1, l_2 ...\}$ is a set of atomic propositions which labels states and only evaluate to $true$ or $false$. $L: S\to 2^{AP}$ is the labeling function that maps each state $s\in S$ to a set  of atomic propositions that are valid in s. 
+%\end{definition}
+
+%The non-determinism of probabilistic systems including DTMC enables the modeling of asynchronous parallel composition\cite{kwiatkowska2002prism}. 
+Probabilistic model checking can be used to verify properties of a stochastic system such as ``is the probability that the agent reaches the unsafe area within 10 steps smaller than 5\%?''. \emph{Probabilistic Computation Tree Logic} (PCTL)~\cite{Hansson1994} allows for probabilistic quantification of those properties. The syntax of PCTL includes state formulas and path formulas~\cite{kwiatkowska2002prism}. A state formula $\phi$ asserts property of a single state $s\in S$ whereas a path formula $\psi$ asserts property of a trajectory. 
+
+\begin{eqnarray}
+\centering
+\phi &::=& true\ |\ l\ |\ \neg \phi_i\ |\ \phi_i \land \phi_j\ |\ P_{\Join p^*}[\psi]\label{eq:sec2_statef}\\
+\psi &::=& \nextstate\phi\ |\ \phi_1 \until^{\leq k}\phi_2\ |\ \phi_1\until\phi_2\ 
+\end{eqnarray}
+	
+\noindent where $l\in AP$ is an atomic proposition; $\Join\in\{\leq, \geq, <, >\}$; $P_{\Join p^*}[\psi]$ means that the probability of generating a trajectory that satisfies formula $\psi$ is $\Join p^*$. $\nextstate \phi$ asserts that the next state after initial state in the trajectory satisfies $\phi$; $\phi_1 \until^{\leq k}\phi_2$ asserts that $\phi_2$ is satisfied in at most $k$ transitions and all preceding states satisfy $\phi_1$; $\phi_1 \until \phi_2$ asserts that $\phi_2$ will be eventually satisfied and all preceding states satisfy $\phi_1$.
+
+The semantics of PCTL is defined by a satisfaction relation $\models$ between formula and DTMC:
+\begin{eqnarray}
+\centering
+s&\models& true\ \ \text{iff state $s\in S$}\\
+s&\models& a\qquad iff\ a\in L(s)\\
+s&\models& \phi\qquad \text{iff state s satisfies state formula $\phi$}\\
+s&\models& \neg\phi\qquad\ iff\ s|=\phi\ is\ false\\
+s&\models& \phi_1\wedge\phi_2\qquad iff\ s\models\phi_1\ and\ s\models\phi_2\\
+s&\models& P_{\Join p^*}(\psi)\qquad iff\ Prob(s, \psi)\Join p^*%\\
+%s&\models& a\qquad iff\ a\in L(s)\\
+%s&\models& \neg\phi\qquad iff s|=\phi is false\\
+%s&\models& \phi_1\wedge\phi_2\qquad iff\ s\models\phi_1\ and\ s\models\phi_2\\
+%s&\models& P_\Join{p^*}(\psi)\qquad iff\ Prob(s, \psi)\Join p^*
+\end{eqnarray} 
+The satisfaction relation $\models$ between trajectory $\tau$ and path formula $\psi$ is defined as below:
+\begin{eqnarray}
+\centering
+\tau&\models& \psi\qquad\ iff\ \tau\ satisfies\ \psi\\
+\tau&\models& \phi_1 U^{\leq k}\phi_2\qquad\ iff\ \exists j\leq k, \tau(s_{t_j})\models \phi_1 \wedge \forall 0\leq i\leq j, \tau(s_{t_i})\models \psi\\
+\tau&\models& \phi_1 W^{\leq k}\phi_2\qquad\ iff\ \tau \models \phi_1 U^{\leq k}\phi_2\ or\ \forall i\leq k, s_{t_i}\models \phi_1)
+\end{eqnarray} 
+
+\section{Counterexample}
+One major strength of probabilistic model checking techniques is to generate counterexamples in case a temporal logic property is violated~\cite{4770111}. Counterexample can be viewed as a proof of the violation. In this thesis, it is used a demonstration of unsafe behaviors.
+
+In addition to the satisfaction relations in PCTL semantics, $\models_{min}$ denotes the minimal satisfaction relation~\cite{4770111} between $\tau$ and $\psi$. Defining $pref(\tau)$ as the set of all prefixes of trajectory $\tau$ including $\tau$ itself, then $\tau\models_{min} \psi$ iff $(\tau\models\psi) \wedge (\forall \tau'\in pref(\tau)\backslash\tau, \tau' \nvDash \psi)$. For instance, if $\psi=\phi_1 \until^{\leq k}\phi_2$, then for any finite trajectory $\tau\models_{min}\phi_1 \until^{\leq k}\phi_2$, only the final state in $\tau$ satisfies $\phi_2$. Let $P(\tau)$ be the probability of transitioning along a trajectory $\tau$ and let $\Gamma_\psi$ be the set of all finite trajectories that satisfy $\tau\models_{min}\psi$, the value of PCTL property $\psi$ is defined as $P_{=?|s_0}[\psi]=\sum\limits_{\tau\in\Gamma_\psi}P(\tau)$. For a DTMC $M_{\pi}$ and a state formula $\phi= P_{\leq p^*}[\psi]$, $M_{\pi} \models \phi$ iff $P_{=?|s_0}[\psi]\leq p^*$. 
+
+There can be different counterexamples for one formula. Let $\mathbb{P}(\Gamma) = \sum_{\tau\in \Gamma}P(\tau)\leq p^*$ be the sum of probabilities of all trajectories in one set. Assumes that all counterexamples for formula $\phi$ are gathered in a set $CEX_{\phi}\subset 2^{\Gamma_\psi}$ such that $(\forall CEX\in CEX_{\phi},\mathbb{P}(CEX)\geq p^*) \wedge (\forall \Gamma\in 2^{\Gamma_\psi}\backslash CEX_{\phi}, \mathbb{P}(\Gamma)< p^*)$. 
+
+\begin{definition}
+\textbf{Minimal counterexample} is a $CEX\in CEX_{\phi}$ which satisfies that $\forall CEX'\in CEX_{\phi}, |CEX|\leq|CEX'|$. There can be multiple minimal counterexamples in $CEX_{\phi}$
+\end{definition}
+
+\begin{definition}
+\textbf{Smallest counterexample} is a minimal counterexample $CEX\in CEX_{\phi}$ which additionlly satisfies $\mathbb{P}(CEX)\leq \mathbb{P}(CEX')$ for any other minimal counterexample $CEX'\in CEX_{\phi}$.
+\end{definition}
+
+By converting DTMC $M_\pi$ into a weighted directed graph, counterexample can be found by solving a k-shortest paths (KSP) problem or 
+a hop-constrained KSP (HKSP) problem~\cite{4770111}. 
+Alternatively, counterexamples can be found by using Satisfiability Modulo Theory solving or mixed integer linear programming to 
+determine the minimal critical subsystems that capture the counterexamples in $M_\pi$~\cite{Wimmer2012}. 
+
+A policy can also be synthesized by solving the objective $\underset{\pi}{min}\ P_{=?}[\psi]$ for an MDP $M$. Conversely, the solved policy can be used to verify the satisfiability of $P_{\leq p^*}[\psi]$. 
+This problem can be solved by linear programming or policy iteration (and value iteration for step-bounded reachability)~\cite{Kwiatkowska2013}.
+
+
+
+

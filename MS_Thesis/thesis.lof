@@ -1,0 +1,25 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3$\cdot $1}{\ignorespaces Navigation task in gridworld}}{12}{figure.caption.6}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {}}}{12}{figure.caption.6}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {}}}{12}{figure.caption.6}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {}}}{12}{figure.caption.6}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {}}}{12}{figure.caption.6}
+\contentsline {figure}{\numberline {3$\cdot $2}{\ignorespaces Counterexample-Guided Apprenticeship Learning}}{14}{figure.caption.7}
+\contentsline {figure}{\numberline {3$\cdot $3}{\ignorespaces Max margin principle}}{16}{figure.caption.8}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {}}}{16}{figure.caption.8}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {}}}{16}{figure.caption.8}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4$\cdot $1}{\ignorespaces Reward mappings of gridworld for different safety threshold}}{24}{figure.caption.9}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {}}}{24}{figure.caption.9}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {}}}{24}{figure.caption.9}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {}}}{24}{figure.caption.9}
+\contentsline {figure}{\numberline {4$\cdot $2}{\ignorespaces (a) The cartpole environment. (b) The cart is at -0.3 and pole angle is {-20}$^\circ $. (c) The cart is at 0.3 and pole angle is {20}$^\circ $.\relax }}{25}{figure.caption.11}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {}}}{25}{figure.caption.11}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {}}}{25}{figure.caption.11}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {}}}{25}{figure.caption.11}
+\contentsline {figure}{\numberline {4$\cdot $3}{\ignorespaces (a) The original mountain-car environment. (b) The mountain-car environment with traffic rules: when the distance from the car to the left edge or the right edge is shorter than $0.1$, the speed of the car should be lower than $0.04$.\relax }}{28}{figure.caption.13}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {}}}{28}{figure.caption.13}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {}}}{28}{figure.caption.13}
+\addvspace {10\p@ }
