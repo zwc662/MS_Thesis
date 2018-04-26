@@ -1,21 +1,16 @@
 %\section{Safety-aware apprenticeship learning algorithm}
 %%\vspace{-2mm}
 In this section, we introduce the Counterexample Guided Apprenticeship Learning (CEGAL)
-algorithm to solve the SafeAL problem. 
+algorithm to solve the Safe-AL problem. 
 It can be viewed as a special case of the safety-aware learning framework described in the previous section. 
 In addition to combining policy verification, counterexample generation and AL, our approach uses an adaptive weighting scheme to weight the separation from $\mu_E$ with the separation from $\mu_{cex}$.
-%\vspace{-4mm}
 \begin{eqnarray}
 &&\underset{\omega}{\max}\underset{\pi\in\Pi_S,\tilde{\pi}\in\Pi_S, cex\in CEX}{\min}\ \omega^T(k(\mu_E - \mu_{\pi})+(1-k)(\mu_{ \tilde{\pi}}  - \mu_{cex}))\label{eq:sec5_1}\\
 &&s.t.\: ||\omega||_2\leq 1 \label{eq:sec5_4},\: k\in[0, 1]\label{eq:sec5_5} \nonumber\\ 
 &&\quad\ \:\omega^T(\mu_E - \mu_{\pi})\leq\omega^T(\mu_E - \mu_{\pi'}),\ \forall\pi'\in\Pi_S \label{eq:sec5_2} \nonumber\\ 
 &&\quad\ \:\omega^T(\mu_{\tilde{\pi}} - \mu_{cex})\leq\omega^T(\mu_{ \tilde{\pi}'} - \mu_{cex'}),\ \forall \tilde{\pi}'\in\Pi_S, \forall cex'\in{CEX} \nonumber
 \end{eqnarray}
-%\vspace{-3mm}
-In essence, we take a weighted-sum approach for solving the multi-objective optimization problem  (\ref{eq:sec4_3}). Assuming that $\Pi_S=\{\pi_{1},$ $\pi_{2},$ $\pi_{3},$ $\ldots \}$ is a set of candidate policies that all satisfy $\Phi$, ${CEX} =\{cex_1,$ $cex_2,$ $cex_3,$ $\ldots\}$ is a set of counterexamples. We introduce a parameter $k$ and change (\ref{eq:sec4_3}) into a weighted sum optimization problem (\ref{eq:sec5_1}). Note that $\pi$ and $\tilde\pi$ can be different. The optimal $\omega$ solved from (\ref{eq:sec5_1}) can be used to generate a new policy $\pi_\omega$ by using algorithms such as policy iteration. 
-We use a probabilistic model checker, such as PRISM~\cite{kwiatkowska2002prism}, to check if $\pi_\omega$ satisfies $\Phi$. If it does, then it will be added to $\Pi_S$. Otherwise, a counterexample generator, such as COMICS~\cite{DBLP:journals/corr/abs-1206-0603}, is used to generate a (minimal) counterexample $cex_{\pi_\omega}$, which will be added to ${CEX}$.  
 
-%\vspace{-2mm}
 \begin{algorithm}[htb]
 \caption{Counterexample-Guided Apprenticeship Learning (CEGAL)}
 \begin{algorithmic}[1]
@@ -52,6 +47,9 @@ We use a probabilistic model checker, such as PRISM~\cite{kwiatkowska2002prism},
 \end{algorithmic}
 \label{algo1}
 \end{algorithm}
+
+In essence, we take a weighted-sum approach for solving the multi-objective optimization problem  (\ref{eq:sec4_3}). Assuming that $\Pi_S=\{\pi_{1},$ $\pi_{2},$ $\pi_{3},$ $\ldots \}$ is a set of candidate policies that all satisfy $\Phi$, ${CEX} =\{cex_1,$ $cex_2,$ $cex_3,$ $\ldots\}$ is a set of counterexamples. We introduce a parameter $k$ and change (\ref{eq:sec4_3}) into a weighted sum optimization problem (\ref{eq:sec5_1}). Note that $\pi$ and $\tilde\pi$ can be different. The optimal $\omega$ solved from (\ref{eq:sec5_1}) can be used to generate a new policy $\pi_\omega$ by using algorithms such as policy iteration. 
+We use a probabilistic model checker, such as PRISM~\cite{kwiatkowska2002prism}, to check if $\pi_\omega$ satisfies $\Phi$. If it does, then it will be added to $\Pi_S$. Otherwise, a counterexample generator, such as COMICS~\cite{DBLP:journals/corr/abs-1206-0603}, is used to generate a (minimal) counterexample $cex_{\pi_\omega}$, which will be added to ${CEX}$.  
 
 Algorithm 1 describes CEGAL in detail. 
 With a constant $sup=1$ and a variable $inf\in[0, sup]$ for the upper and lower bounds respectively, the learner determines the value of $k$ within $[inf, sup]$ in each iteration depending on the outcome of the verifier and uses $k$ in solving (\ref{eq:sec5_1}) in line 27. 
@@ -123,11 +121,11 @@ The first part of the guarantee can be proven by case splitting. Algorithm~\ref{
 In the first case, $\pi^*$ clearly satisfies $\Phi$. 
 In the second case,  
 \begin{equation}
-(\pi^*=\underset{{\pi}\in\Pi_S}{argmin}||\mu_E - \mu_{{\pi}}||_2)\wedge(\pi\ satisfies\ \Phi,\ \forall\pi\in\Pi_S)
+(\pi^*=\underset{{\pi}\in\Pi_S}{argmin}||\mu_E - \mu_{{\pi}}||_2)\wedge(\pi\models\Phi,\ \forall\pi\in\Pi_S)
 \end{equation}
 is always true. Hence $\pi^*$ always satisfies $\Phi$. For the second part of the guarantee, the initial policy $\pi_0$ itself is the final output if
 \begin{equation}
-(\pi_0\ satisfies\ \Phi)\wedge(||\mu_E-\mu_{\pi_0}||_2\leq\epsilon). 
+(\pi_0\models\Phi)\wedge(||\mu_E-\mu_{\pi_0}||_2\leq\epsilon). 
 \end{equation}
 Otherwise, $\pi_0$ is added to $\Pi_S$ if it satisfies $\Phi$.  
 During the iteration, since a safe policy $\epsilon$-close to $\mu_E$ won't be added to $\Pi_S$ but directly be returned, then

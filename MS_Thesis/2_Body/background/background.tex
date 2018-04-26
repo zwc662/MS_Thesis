@@ -83,10 +83,10 @@ One major strength of probabilistic model checking techniques is to generate cou
 
 In addition to the satisfaction relations in PCTL semantics, $\models_{min}$ denotes the minimal satisfaction relation~\cite{4770111} between $\tau$ and $\psi$. Defining $pref(\tau)$ as the set of all prefixes of trajectory $\tau$ including $\tau$ itself, then $\tau\models_{min} \psi$ iff $(\tau\models\psi) \wedge (\forall \tau'\in pref(\tau)\backslash\tau, \tau' \nvDash \psi)$. For instance, if $\psi=\phi_1 \until^{\leq k}\phi_2$, then for any finite trajectory $\tau\models_{min}\phi_1 \until^{\leq k}\phi_2$, only the final state in $\tau$ satisfies $\phi_2$. Let $P(\tau)$ be the probability of transitioning along a trajectory $\tau$ and let $\Gamma_\psi$ be the set of all finite trajectories that satisfy $\tau\models_{min}\psi$, the value of PCTL property $\psi$ is defined as $P_{=?|s_0}[\psi]=\sum\limits_{\tau\in\Gamma_\psi}P(\tau)$. For a DTMC $M_{\pi}$ and a state formula $\phi= P_{\leq p^*}[\psi]$, $M_{\pi} \models \phi$ iff $P_{=?|s_0}[\psi]\leq p^*$. 
 
-There can be different counterexamples for one formula. Let $\mathbb{P}(\Gamma) = \sum_{\tau\in \Gamma}P(\tau)\leq p^*$ be the sum of probabilities of all trajectories in one set. Assumes that all counterexamples for formula $\phi$ are gathered in a set $CEX_{\phi}\subset 2^{\Gamma_\psi}$ such that $(\forall CEX\in CEX_{\phi},\mathbb{P}(CEX)\geq p^*) \wedge (\forall \Gamma\in 2^{\Gamma_\psi}\backslash CEX_{\phi}, \mathbb{P}(\Gamma)< p^*)$. 
+There can be different counterexamples for one formula. Let $\mathbb{P}(\Gamma) = \sum_{\tau\in \Gamma}P(\tau)\leq p^*$ be the sum of probabilities of all trajectories in one set. Assumes that all counterexamples for formula $\phi$ are gathered in a set $CEX_{\phi}\subset 2^{\Gamma_\psi}$ such that $(\forall CEX\in CEX_{\phi},\mathbb{P}(CEX)\geq p^*) \wedge (\forall \Gamma\in 2^{\Gamma_\psi}\backslash CEX_{\phi}, \mathbb{P}(\Gamma)< p^*)$. The following definitions can be found in~\cite{4770111}.
 
 \begin{definition}
-\textbf{Minimal counterexample} is a $CEX\in CEX_{\phi}$ which satisfies that $\forall CEX'\in CEX_{\phi}, |CEX|\leq|CEX'|$. There can be multiple minimal counterexamples in $CEX_{\phi}$
+\textbf{Minimal counterexample} is a $CEX\in CEX_{\phi}$ which satisfies that $\forall CEX'\in CEX_{\phi}, |CEX|\leq|CEX'|$. There can be multiple minimal counterexamples in $CEX_{\phi}$.
 \end{definition}
 
 \begin{definition}
