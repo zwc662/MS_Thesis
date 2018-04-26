@@ -25,9 +25,9 @@ We use a probabilistic model checker, such as PRISM~\cite{kwiatkowska2002prism},
 \\\qquad $\Phi\gets$ Specification; $\epsilon\gets$ Error bound for the expected features;
 \\\qquad $\sigma, \alpha\in(0, 1)\gets$ Error bound $\sigma$ and step length $\alpha$ for the parameter $k$; 
 \State \textbf{Initialization}:
+\\\qquad \textbf{If} $||\mu_E-\mu_{\pi_0}||_2\leq \epsilon$, {\bf then return} $\pi_0$ \Comment{$\pi_0$ is the \textbf{initial safe policy}}
+\\\qquad $\Pi_S\leftarrow\{\pi_0\}$, $CEX\leftarrow\emptyset$ \Comment{Initialize candidate and counterexample set}
 \\\qquad $inf\leftarrow0, sup\leftarrow1, k\leftarrow sup$ \Comment{Initialize multi-optimization parameter $k$}
-\\\qquad $\Pi_S\leftarrow\{\pi_0\}$ \Comment{Initialize candidate set with an \textbf{initial safe policy}}
-\\\qquad $CEX\leftarrow\emptyset$ \Comment{Initialize counterexample set as empty}
 \\\qquad $\pi_1\leftarrow$ Policy learnt from $\mu_E$ via apprenticeship learning
 \State \textbf{Iteration $i\ (i\geq 1)$}:
 \\\qquad\textbf{Verifier:}
@@ -62,14 +62,6 @@ Without loss of generality, we assume this policy satisfies $\Phi$.
 Suppose in iteration $i$, an intermediate policy $\pi_i$ learnt by the learner in iteration $i-1$ is verified to satisfy $\Phi$, then we increase $inf$ to $inf=k$ and reset $k$ to $k=sup$ as shown in line 22. 
 If $\pi_i$ does not satisfy $\Phi$, then we reduce $k$ to $k=\alpha\cdot inf + (1 - \alpha)k$  as shown in line 26 where $\alpha\in(0, 1)$ is a step length parameter. 
 If $|k-inf|\leq\sigma$ and $\pi_i$ still does not satisfy $\Phi$, the algorithm chooses from $\Pi_S$ a best safe policy $\pi^*$ which has the smallest margin to $\pi_E$ as shown in line 24. If $\pi_i$ satisfies $\Phi$ and is {$\epsilon$-close} to $\pi_E$, the algorithm outputs $\pi_i$ as show in line 19. For the occasions when $\pi_i$ satisfies $\Phi$ and $inf = sup = k = 1$, solving (\ref{eq:sec5_1}) is equivalent to solving (\ref{eq:sec1_1}) as in the original AL algorithm.
-
-\begin{remark}
-The initial policy $\pi_0$ does not have to be maximally safe, although such a policy can be used to verify if $\Phi$ is  satisfiable at all. 
-Naively safe policies often suffice for obtaining a safe and performant output at the end. Such a policy can be obtained easily in many settings, e.g., in the grid-world example one safe policy is simply staying in the initial cell. 
-In both cases, $\pi_0$ typically has very low performance since satisfying $\Phi$ is the only requirement for it. An initial safe policy can also be generated (with no guarantee) by solving (\ref{eq:sec4_2}) iteratively as shown in Algorithm 2.
-%We also note that apprenticeship learning itself does not guarantee safety for the final output even if we initialize it with a safe policy.   
-\end{remark}
-
 %%\vspace{-4mm}
 \begin{algorithm}[htb]
 \caption{Initial Safe Policy Generation}
@@ -114,22 +106,37 @@ In both cases, $\pi_0$ typically has very low performance since satisfying $\Phi
 \end{algorithm}
 %%\vspace{-4mm}
 
+\begin{remark}
+The initial policy $\pi_0$ does not have to be maximally safe, although such a policy can be used to verify if $\Phi$ is  satisfiable at all. 
+Naively safe policies often suffice for obtaining a safe and performant output at the end. Such a policy can be obtained easily in many settings, e.g., in the grid-world example one safe policy is simply staying in the initial cell. 
+In both cases, $\pi_0$ typically has very low performance since satisfying $\Phi$ is the only requirement for it. An initial safe policy can also be generated (with no guarantee) by solving (\ref{eq:sec4_2}) iteratively as shown in Algorithm 2.
+%We also note that apprenticeship learning itself does not guarantee safety for the final output even if we initialize it with a safe policy.   
+\end{remark}
+
 \begin{theorem}
 %If the initial policy $\pi_0$ satisfies $\Phi$, then Algorithm~\ref{algo1} is guaranteed to output a policy $\pi^*$, such that (1) $\pi^*$ satisfies $\Phi$, and (2) the margin between the expected features $ \mu_{\pi^*}$ of $\pi^*$ and the expert's features $\mu_E$ has no smaller margin to expert's features $\mu_E$ than the expected features $\mu_{\pi_0}$ of the initial policy $\pi_0$, i.e. $\|\mu_E - \mu_{\pi^*}\|_2\leq\|\mu_E - \mu_{\pi_0}\|_2$. 
 Given an initial policy $\pi_0$ that satisfies $\Phi$, Algorithm~\ref{algo1} is guaranteed to output a policy $\pi^*$, such that (1) $\pi^*$ satisfies $\Phi$, and 
 (2) the performance of $\pi^*$ is at least as good as that of $\pi_0$ when compared to $\pi_E$, i.e. $\|\mu_E - \mu_{\pi^*}\|_2\leq\|\mu_E - \mu_{\pi_0}\|_2$. 
 \end{theorem}
-\noindent{\it Proof sketch. }%\revise{???}
-The first part of the guarantee can be proven by case splitting. 
-Algorithm~\ref{algo1} outputs $\pi^*$ either when $\pi^*$ satisfies $\Phi$ and is {$\epsilon$-close} to $\pi_E$, or when $|k-inf|\leq \sigma$ in some iteration. 
+\noindent{\it Proof sketch. }%\revise{???} 
+The first part of the guarantee can be proven by case splitting. Algorithm~\ref{algo1} outputs $\pi^*$ either when $\pi^*$ satisfies $\Phi$ and is {$\epsilon$-close} to $\pi_E$, or when $|k-inf|\leq \sigma$ in some iteration. 
 In the first case, $\pi^*$ clearly satisfies $\Phi$. 
-In the second case, $\pi^*$ is selected from the set $\Pi_S$ which contains all the policies that have been found to satisfy $\Phi$ so far, so $\pi^*$ satisfies $\Phi$.
-For the second part of the guarantee, the initial policy $\pi_0$ is the final output $\pi^*$ if $\pi_0$ satisfies $\Phi$ and is {$\epsilon$-close} to $\pi_E$. 
+In the second case,  
+\begin{equation}
+(\pi^*=\underset{{\pi}\in\Pi_S}{argmin}||\mu_E - \mu_{{\pi}}||_2)\wedge(\pi\ satisfies\ \Phi,\ \forall\pi\in\Pi_S)
+\end{equation}
+is always true. Hence $\pi^*$ always satisfies $\Phi$. For the second part of the guarantee, the initial policy $\pi_0$ itself is the final output if
+\begin{equation}
+(\pi_0\ satisfies\ \Phi)\wedge(||\mu_E-\mu_{\pi_0}||_2\leq\epsilon). 
+\end{equation}
 Otherwise, $\pi_0$ is added to $\Pi_S$ if it satisfies $\Phi$.  
-During the iteration, if $|k-inf|\leq \sigma$ in some iteration, then the final output is $\pi^*=\underset{{\pi}\in\Pi_S}{argmin}||\mu_E - \mu_{{\pi}}||_2$, so it must satisfy $\|\mu_E -  \mu_{\pi^*}\|_2\leq\|\mu_E - \mu_{\pi_0}\|_2$. 
-If a learnt policy $\pi^*$ satisfies $\Phi$ and is {$\epsilon$-close} to $\pi_E$, then Algorithm~\ref{algo1} outputs $\pi^*$ without adding it to $\Pi_S$. Obviously $\|\mu_E - \mu_{{\pi}}\|_2>\epsilon, \forall{\pi}\in\Pi_S$, so $\|\mu_E -  \mu_{\pi^*}\|_2\leq\|\mu_E - \mu_{\pi_0}\|_2$.
-
+During the iteration, since a safe policy $\epsilon$-close to $\mu_E$ won't be added to $\Pi_S$ but directly be returned, then
+\begin{equation}
+(||\mu_E-\mu_{\pi}||_2\geq\epsilon, \forall\pi\in\Pi_S)\wedge\big((\pi^*=\underset{{\pi}\in\Pi_S}{argmin}||\mu_E - \mu_{{\pi}}||_2)\big)\vee(||\mu_E-\mu_{\pi^*}||_2\leq\epsilon)\big) 
+\end{equation}
+is always true. Hence $\|\mu_E -  \mu_{\pi^*}\|_2\leq\|\mu_E - \mu_{\pi_0}\|_2$ is always true. 
 \noindent
+
 {\it Discussion.} In the worst case CEGAL will return the initial safe policy. However, this can be because a policy that simultaneously satisfies $\Phi$ and is $\epsilon$-close to the expert's demonstrations does not exist. Comparing to AL which offers no safety guarantee and finding the maximally safe policy which has very poor performance, CEGAL provides a principled way of guaranteeing safety while retaining performance.
 
 \noindent

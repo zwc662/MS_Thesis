@@ -3,7 +3,7 @@ We evaluate our algorithm on three case studies: (1) grid-world, (2) cart pole, 
 Our prototype tool was implemented in Python\footnote{\url{https://github.com/zwc662/CAV2018}}.
 For the OpenAI-gym experiments, in each step, the agent sends an action to the OpenAI environment and the environment returns an observation and reward. 
 The parameters are $\gamma=0.99, \sigma=10^{-5}, \alpha=0.5$. For grid-world, $\epsilon=1E-5$, whereas for OpenAI-gym environments, $\epsilon=10$.
-We show that our algorithm can guarantee the safety of the learnt policy. Moreover, the learnt policy has comparable and even better performance compared with the one directly learnt using AL. 
+We use model checking results to show that our algorithm can guarantee the safety of the learnt policy. Moreover, we quantitatively show that the learnt policy has comparable performance compared with the one directly learnt using AL.
 %\vspace{-2mm}
 \section{Navigation in Grid World}
 Our first experiment is an extension on the 2D navigation task in Section~\ref{sec:section3}. Specifications with different $p^*$'s in \label{eq:spec} are given. Fig.~{\ref{fig:grid_world2} shows the different reward mappings that induce the policies learnt by our algorithm. As the safety threshold (value of $p^*$) decreases, the algorithm will try to find a weight vector that assigns low rewards to the  unsafe states and states around them, so that the agent will have a lower probability of moving into the unsafe areas. However, as a result, the agent will also focus more on avoiding the unsafe areas than actually reaching the goal area. In essence, we trade off performance with safety. 
@@ -104,13 +104,13 @@ We also evaluated the scalability of our implementation using the grid-world exa
 	\end{minipage}\hfill
 }
 %\vspace{-3mm} 
-  \caption{(a) The cartpole environment. (b) The cart is at -0.3 and pole angle is {-20}$^\circ$. (c) The cart is at 0.3 and pole angle is {20}$^\circ$.}    
+  \caption[The cartpole environment]{(a) The cartpole environment. (b) The cart is at -0.3 and pole angle is {-20}$^\circ$. (c) The cart is at 0.3 and pole angle is {20}$^\circ$.}    
 \label{fig:cartpole}
 %\vspace{-3mm}
 \end{figure}
-In grid world, it is hard to evaluate the performance that the agent may need to sacrifice for safety. Hence I implement the algorithm in OpenAI gym environments where performance can be quantified. In the cart-pole environment as shown in Fig.~\ref{fig:cartpole-v0}, the goal is to keep the pole on a cart from falling over as long as possible by moving the cart either to the left or to the right in each time step. The maximum step length is $t=200$. The position, velocity and angle of the cart and the pole are continuous values and observable, but the actual dynamics of the system are unknown\footnote{The MDP is built up through sampling. The feature vector in each state contains $30$ radial basis functions which depend on the squared Euclidean distances between current states and other $30$ states which are uniformly distributed in the state space.}. 
- 
-A maneuver is deemed {\it unsafe} if the pole angle is larger than 20$^\circ$ while the cart's horizontal position is more than $\pm 0.3$ as shown in Fig.~\ref{fig:cartpole-v1} and \ref{fig:cartpole-v2}. I formalize the safety requirement in PCTL as (\ref{eq:spec1}).
+In grid world, it is hard to evaluate the performance that the agent may need to sacrifice for safety. Hence we implement the algorithm in OpenAI gym environments where performance can be quantified. In the cart-pole environment as shown in Fig.~\ref{fig:cartpole-v0}, the goal is to keep the pole on a cart from falling over as long as possible by moving the cart either to the left or to the right in each time step. The maximum step length is $t=200$. The position, velocity and angle of the cart and the pole are continuous values and observable, but the actual dynamics of the system are unknown.
+
+We discrete the continuous observation space and formulate the environment as an MDP with 400 states and 2 actions. Through exploring the environment, the transition function is determined by the samples of experienced transitions. The feature vector in each state contains $30$ radial basis functions which depend on the squared Euclidean distances between current states and other $30$ states which are uniformly distributed in the state space. In addition, a maneuver is deemed {\it unsafe} if the pole angle is larger than 20$^\circ$ while the cart's horizontal position is more than $\pm 0.3$ as shown in Fig.~\ref{fig:cartpole-v1} and \ref{fig:cartpole-v2}. We formalize the safety requirement in PCTL as (\ref{eq:spec1}).
 %\vspace{-2mm}
 \begin{equation}
 \begin{split}
@@ -150,14 +150,14 @@ $p^*=5\%$ & 0.04\% & 83 & 0.5\% & 50\\
 \end{table}
 %\vspace{-10mm}
 
- I consider only demonstrations for which the pole is held upright without violating any of the safety conditions for all 200 steps. The safest policy synthesized by PRISM-games is used as the initial safe policy. 
- I also compare the different policies learned by CEGAL for different safety threshold $p^*$s. 
+We consider only demonstrations for which the pole is held upright without violating any of the safety conditions for all 200 steps. The safest policy synthesized by PRISM-games is used as the initial safe policy. 
+ We also compare the different policies learned by CEGAL for different safety threshold $p^*$s. 
 In Table~\ref{tab:cartpole1}, the policies are compared in terms of model checking results (`MC Result') on the PCTL property in (\ref{eq:spec1}) using the constructed MDP, the average steps (`Avg. Steps') that a policy (executed in the OpenAI environment) can hold across $5000$ rounds (the higher the better), and averaged percentage times (`Unsafe Rate') that a policy (executed in the OpenAI environment) violates the $unsafe$ conditions across $5000$ rounds. The last column in the table shows the averaged number of iterations for these algorithms to converge (with $50$ as the maximum number of iterations). 
 The policy in the first row is the result of using AL alone. 
 Observe that from $p^* = 30\%$ to $10\%$, the performance of the learnt policy is similar. However, when the safety threshold becomes very low, e.g., $p^*=5\%$, the performance of the learnt policy drops significantly. 
 Observe also that the safest policy has the lowest performance amongst all. 
 It corresponds to simply letting the pole fall and thus does not risk moving the cart out of the range [-0.3, 0.3]. 
- I note that the discrepancy between the `MC result' and the `unsafe rate' is due to the MDP abstraction of the actual game environment. The safety guarantee of the algorithm is based on the former and the latter is used for validation purposes. 
+ We note that the discrepancy between the `MC result' and the `unsafe rate' is due to the MDP abstraction of the actual game environment. The safety guarantee of the algorithm is based on the former and the latter is used for validation purposes. The discordances between model checking results and unsafe rates are due to the inaccurate transition function. Despite the inconsistency, the policies learnt via CEGAL still show lower frequency of reaching unsafe states than that via AL.
 
 \section{Mountain-Car from OpenAI Gym}
 %\vspace{-5mm} 
@@ -178,13 +178,15 @@ It corresponds to simply letting the pole fall and thus does not risk moving the
 	\end{minipage}\hspace{0.1\linewidth}
 }
 %\vspace{-3mm} 
-\caption{(a) The original mountain-car environment. (b) The mountain-car environment with traffic rules: when the distance from the car to the left edge or the right edge is shorter than $0.1$, the speed of the car should be lower than $0.04$.}  
+\caption[The mountaincar environment]{(a) The original mountain-car environment. (b) The mountain-car environment with traffic rules: when the distance from the car to the left edge or the right edge is shorter than $0.1$, the speed of the car should be lower than $0.04$.}  
 \label{fig:mountaincar}
 \end{figure}
 
-Our third experiment uses the mountain-car environment from OpenAI Gym. As shown in Fig. {\ref{fig:mountaincar-v0}}, a car starts from the bottom of the valley and tries to reach the mountaintop on the right as quickly as possible. In each time step the car can perform one of the three actions, accelerating to the left, coasting, and accelerating to the right. The agent fails if the step length reaches the maximum ($t=66$). The velocity and position of the car are continuous values and observable while the exact dynamics are unknown\footnote{The MDP is built up through sampling. The feature vector for each state contains 2 exponential functions and 18 radial basis functions which respectively depend on the squared Euclidean distances between s and other 18 states which are uniformly distributed in the state space.}. In this game setting, the car cannot reach the right mountaintop by simply accelerating to the right. It has to accumulate momentum first by moving back and forth in the valley. The safety rules we enforce are shown in Fig.~{\ref{fig:mountaincar-v1}}. They correspond to speed limits when the car is close to the left mountaintop or to the right mountaintop (in case it is a cliff on the other side of the mountaintop). Similar to the previous experiments, we consider only expert demonstrations that successfully reach the right mountaintop without violating any of the safety conditions. 
+Our third experiment uses the mountain-car environment from OpenAI Gym. As shown in Fig. {\ref{fig:mountaincar-v0}}, a car starts from the bottom of the valley and tries to reach the mountaintop on the right as quickly as possible. In each time step the car can perform one of the three actions, accelerating to the left, coasting, and accelerating to the right. The agent fails if the step length reaches the maximum ($t=66$). The velocity and position of the car are continuous values and observable while the exact dynamics are unknown.
+
+We discrete the continuous observation space and formulate the environment as an MDP with 320 states and 3 actions. Through exploring the environment, the transition function is determined by the samples of experienced transitions. The feature vector for each state contains 2 exponential functions and 18 radial basis functions which respectively depend on the squared Euclidean distances between the current state and other 18 states which are uniformly distributed in the state space.}. In this game setting, the car cannot reach the right mountaintop by simply accelerating to the right. It has to accumulate momentum first by moving back and forth in the valley. The safety rules we enforce are shown in Fig.~{\ref{fig:mountaincar-v1}. They correspond to speed limits when the car is close to the left mountaintop or to the right mountaintop (in case it is a cliff on the other side of the mountaintop). Similar to the previous experiments, we consider only expert demonstrations that successfully reach the right mountaintop without violating any of the safety conditions. 
 The average step length of demonstrations is $40$. 
- I formalize the safety requirement in PCTL as (\ref{eq:spec2}). 
+ We formalize the safety requirement in PCTL as (\ref{eq:spec2}). 
 
 %\vspace{-5mm}
 \begin{equation}
@@ -222,9 +224,10 @@ $p^*=10\%$ &7.6\% & $Fail$ & 0\%  & 40\\
 %\vspace{-8mm}
 \end{table}
 
- I compare the different policies using the same set of categories as in the cart-pole example. The numbers are averaged over 5000 rounds. The last column in the table shows the averaged number of iterations for these algorithms to converge (with $50$ as the maximum number of iterations).
-As shown in the first row, the policy learnt via AL has the highest probability of going over the speed limits. I observe that this policy makes the car speed up all the way to the left mountaintop to maximize its potential energy. The safest policy corresponds to simply staying in the bottom of the valley. 
-The policies learnt via CEGAL for the safety threshold $p^*$ ranges from $60\%$ to $50\%$ not only have lower probability of violating speed limits but also maintain comparable performance. However, when the safety threshold $p^*$ further decreases, the agent becomes more conservative and it takes more time for the car to finish the task.
+ We compare the different policies using the same set of categories as in the cart-pole example. The numbers are averaged over 5000 rounds. The last column in the table shows the averaged number of iterations for these algorithms to converge (with $50$ as the maximum number of iterations).
+As shown in the first row, the policy learnt via AL has the highest probability of going over the speed limits. We observe that this policy makes the car speed up all the way to the left mountaintop to maximize its potential energy. The safest policy corresponds to simply staying in the bottom of the valley. 
+The policies learnt via CEGAL for the safety threshold $p^*$ ranges from $60\%$ to $50\%$ not only have lower probability of violating speed limits but also maintain comparable performance. However, when the safety threshold $p^*$ further decreases, the agent becomes more conservative and it takes more time for the car to finish the task. The discordances between model checking results and unsafe rates are due to the inaccurate transition function. Despite the inconsistency, the policies learnt via CEGAL still show obvious restraint in reaching unsafe states than that via AL.
+
 %\vspace{-8mm}
 
 

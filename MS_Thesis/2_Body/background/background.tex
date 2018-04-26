@@ -74,6 +74,10 @@ The satisfaction relation $\models$ between trajectory $\tau$ and path formula $
 \end{eqnarray} 
 
 In this paper a third-party probabilistic model checking tool, PRISM~\cite{kwiatkowska2002prism}, is used. It can take a description of a system, which is a DTMC in the dissertation, with a set of PCTL specifications as inputs, then answers which states of the system satisfy each specification. This is a symbolic model checker~\cite{fujita1997multi} which uses binary decision diagram (BDD) and multi-terminal BDDs (MTBDDs) as the underlying data structures. The tool reduces the verification problem to reachability-based computation and numerical calculation. The data structures can help the tool perform efficient and fast computation on large, structured models~\cite{kwiatkowska2002prism}. 
+
+A policy can also be synthesized by using model checking tool to solve the objective $\underset{\pi}{min}\ P_{=?}[\psi]$ for an MDP $M$. Conversely, the solved policy can be used to verify the satisfiability of $P_{\leq p^*}[\psi]$. 
+This problem can be solved by linear programming or policy iteration (and value iteration for step-bounded reachability)~\cite{Kwiatkowska2013}.
+
 \section{Counterexample}
 One major strength of probabilistic model checking techniques is to generate counterexamples in case a temporal logic property is violated~\cite{4770111}. Counterexample can be viewed as a proof of the violation. In this thesis, it is used a demonstration of unsafe behaviors.
 
@@ -94,9 +98,7 @@ a hop-constrained KSP (HKSP) problem~\cite{4770111}.
 Alternatively, counterexamples can be found by using Satisfiability Modulo Theory solving or mixed integer linear programming to 
 determine the minimal critical subsystems that capture the counterexamples in $M_\pi$~\cite{Wimmer2012}. 
 
-A policy can also be synthesized by solving the objective $\underset{\pi}{min}\ P_{=?}[\psi]$ for an MDP $M$. Conversely, the solved policy can be used to verify the satisfiability of $P_{\leq p^*}[\psi]$. 
-This problem can be solved by linear programming or policy iteration (and value iteration for step-bounded reachability)~\cite{Kwiatkowska2013}.
-
+We use a third-party tool, COMICS~\cite{DBLP:journals/corr/abs-1206-0603}, to generate minimal counterexample for a DTMC. This tool performs SCC-based model checking~\cite{unknown} to a DTMC and a PCTL property. If model checking results refutes the PCTL property, a counterexample can be computed and represented either as a set of paths or as a critical subsystem. In this dissertation, we use the set of paths representation.
 
 
 

@@ -1,7 +1,7 @@
 %\section{Problem Formulation and overview}
-I will first analyze the safety issues in apprenticeship learning with a grid-world example. Then I will define the safety-aware apprenticeship learning (SafeAL) problem and give intuitions on how I solve it. 
+I will first analyze the safety issues in apprenticeship learning with a grid-world example. Then we will define the safety-aware apprenticeship learning (SafeAL) problem and give intuitions on how we solve it. 
 
-%Given an $MDP\backslash R$ $M = (S, A, T, \gamma, D)$ and a set of m trajectories $\{\tau_0, \tau_1, ..., \tau_m\}$, now I define a set of atomic propositions $AP=\{'safe', 'unsafe', ...\}$ and use label function $L$ to label each $s\in S$ 'safe' or 'unsafe'. A specification $\Phi$ defines requirements on learnt policies. Especially, safety specification $\Phi$ formalized in PCTL can be in such forms: 
+%Given an $MDP\backslash R$ $M = (S, A, T, \gamma, D)$ and a set of m trajectories $\{\tau_0, \tau_1, ..., \tau_m\}$, now we define a set of atomic propositions $AP=\{'safe', 'unsafe', ...\}$ and use label function $L$ to label each $s\in S$ 'safe' or 'unsafe'. A specification $\Phi$ defines requirements on learnt policies. Especially, safety specification $\Phi$ formalized in PCTL can be in such forms: 
 
 %\begin{eqnarray}
 %\centering
@@ -69,7 +69,7 @@ Model checking result shows that the probability of reaching an unsafe state by 
 The reward function that induces the learnt policy in this scenario is shown in Fig.~{\ref{fig:sec3_5}}.
 Observe that only the goal area has been learnt whereas the agent is oblivious to the unsafe regions (treating them in the same way as other black cells). Indeed, probability of reaching an unsafe state within $64$ steps with this policy turns out to be $98\%$ (thus violating the safety requirement by a large margin).  
 To make matters worse, the value of $p^*$ may be decided or revised after a policy has been learnt. In that case, even the original expert policy $\pi_E$ is unsafe, e.g., when $p^*=10\%$. 
-Thus, I need to adapt the AL algorithm to account for this additional safety requirement. 
+Thus, we need to adapt the AL algorithm to account for this additional safety requirement. 
 \begin{definition}
 \textbf{The safety-aware apprenticeship learning (SafeAL) problem} is, given an $MDP\backslash R$, a set of $m$ trajectories $\{\tau_0, \tau_1, ..., \tau_{m-1}\}$ demonstrated by an expert, and a specification $\Phi$, to learn a policy $\pi$ that satisfies $\Phi$ and is $\epsilon$-close to the expert policy $\pi_E$.
 \end{definition}

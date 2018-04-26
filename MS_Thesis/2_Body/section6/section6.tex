@@ -21,9 +21,18 @@ Obviously, starting from an initial $inf=inf_0<sup$, with the alternating update
 \end{equation}
 %\vspace{-3mm}
 
-\noindent iterations to reduce the multi-objective optimization problem to original apprenticeship learning and then the second phase begins. Since $k=sup$, the iteration will stop immediately when an unsafe policy is learnt as in line 24. This phase will not take more iterations than original AL algorithm does to converge and the convergence result of AL is given in \cite{Abbeel:2004:ALV:1015330.1015430}. 
+\noindent iterations to reduce the multi-objective optimization problem to original apprenticeship learning and then the second phase begins. Since $k=sup$, the iteration will stop immediately when an unsafe policy is learnt as in line 24. This phase will not take more iterations than original AL algorithm does to converge.
 
-In each iteration, the algorithm first solves a second-order cone programming (SOCP) problem (\ref{eq:sec5_1}) to learn a policy. SOCP problems can be solved in polynomial time by interior-point (IP) methods~\cite{Kuo:2004aa}.
+The convergence analysis of AL can be found in~\cite{Abbeel:2004:ALV:1015330.1015430}. First it's assumed that the ball with radius $\epsilon$ around $\mu_E$, which is a set $\{\mu\mid d(\mu_E, \mu)\leq\epsilon\}$, will have intersection with be the convex hull of the set of feature expectations of candidate policy set $\Pi$ after $n$ iterations. Then it's provable that $n$ satisfies
+\begin{equation}
+n\leq O\big(\frac{k}{(1-\gamma)^2\epsilon^2}\log{\frac{k}{(1-\gamma)\epsilon}}\big)
+\end{equation}
+where $k$ is the number of features, $\gamma$ is the discount factor. It's also ensured in~\cite{Abbeel:2004:ALV:1015330.1015430} that the number of sample demonstrations needed to make AL algorithm output with probability at least $1-\delta$ should suffice that
+\begin{equation}
+m\geq \frac{2k}{(1-\gamma)^2\epsilon^2}\log{\frac{2k}{\delta}}
+\end{equation}
+
+In each iteration of Algorithm 1, the algorithm first solves a second-order cone programming (SOCP) problem (\ref{eq:sec5_1}) to learn a policy. SOCP problems can be solved in polynomial time by interior-point (IP) methods~\cite{Kuo:2004aa}.
 PCTL model checking for DTMCs can be solved in time linear in the size of the formula and polynomial in the size of the state space~\cite{Hansson1994}. 
 Counterexample generation can be done either by enumerating paths using the $k$-shortest path algorithm or determining a critical subsystem using either a $SMT$ formulation or mixed integer linear programming (MILP)~\cite{Wimmer2012}. For the $k$-shortest path-based algorithm, it can be computationally expensive sometimes to enumerate a large amount of paths (i.e. a large $k$) when $p^*$ is large. This can be alleviated by using a smaller $p^*$ during calculation, which is equivalent to considering only paths that have high probabilities.
 %\vspace{-1mm}

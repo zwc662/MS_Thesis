@@ -7,48 +7,50 @@ A level-1 auxiliary file: 2_Body/body.aux
 A level-1 auxiliary file: 3_Conclusion/conclusion.aux
 The style file: apalike.bst
 Database file #1: thesis.bib
+Warning--entry type for "unknown" isn't style-file defined
+--line 11 of file thesis.bib
 Warning--empty journal in bellman
 Warning--can't use both author and editor fields in Kwiatkowska2013
 Warning--can't use both author and editor fields in Wimmer2012
-You've used 25 entries,
+You've used 27 entries,
             1935 wiz_defined-function locations,
-            646 strings with 9282 characters,
-and the built_in function-call counts, 11974 in all, are:
-= -- 1208
-> -- 519
+            658 strings with 9639 characters,
+and the built_in function-call counts, 12767 in all, are:
+= -- 1284
+> -- 565
 < -- 20
-+ -- 188
-- -- 178
-* -- 976
-:= -- 1974
-add.period$ -- 85
-call.type$ -- 25
-change.case$ -- 212
-chr.to.int$ -- 25
-cite$ -- 28
-duplicate$ -- 485
-empty$ -- 809
-format.name$ -- 219
-if$ -- 2445
++ -- 204
+- -- 194
+* -- 1050
+:= -- 2119
+add.period$ -- 90
+call.type$ -- 27
+change.case$ -- 230
+chr.to.int$ -- 27
+cite$ -- 30
+duplicate$ -- 509
+empty$ -- 854
+format.name$ -- 237
+if$ -- 2591
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 27
-newline$ -- 128
-num.names$ -- 75
-pop$ -- 208
+missing$ -- 28
+newline$ -- 137
+num.names$ -- 81
+pop$ -- 223
 preamble$ -- 1
-purify$ -- 214
+purify$ -- 232
 quote$ -- 0
-skip$ -- 386
+skip$ -- 404
 stack$ -- 0
-substring$ -- 814
-swap$ -- 125
+substring$ -- 863
+swap$ -- 126
 text.length$ -- 11
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 146
+type$ -- 158
 warning$ -- 3
-while$ -- 95
+while$ -- 101
 width$ -- 0
-write$ -- 344
-(There were 3 warnings)
+write$ -- 367
+(There were 4 warnings)
