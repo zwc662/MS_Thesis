@@ -1,13 +1,13 @@
 \section{Markov Decision Process}
 \begin{definition}
-\textbf{Markov Decision Process (MDP)} is a tuple $(S,$ $A,$ $T,$ $\gamma,$ $s_0,$ $R)$, where $S$ is a finite set of states; $A$ is a set of actions; $T: S\times A\times S\rightarrow [0, 1]$ is a transition function describing the probability of transitioning from one state $s\in S$ to another $s'\in S$ by taking action $a\in A$ in state $s$; $R: S\to \mathbb{R}\ $is a reward function which maps each state $s\in S$ to a real number indicating the reward of being in state $s$; $s_0\in S$ is the initial state; $\gamma \in [0, 1)$ is a discount factor which describes how future rewards attenuate when a sequence of transitions is made.
+\textbf{Markov Decision Process (MDP)} is a tuple $(S,$ $A,$ $T,$ $\gamma,$ $s_0,$ $R)$, where $S$ is a finite set of states; $A$ is a set of actions; $T: S\times A\times S\rightarrow [0, 1]$ is a transition function describing the probability of transitioning from one state $s\in S$ to another $s'\in S$ by taking action $a\in A$ in state $s$; $R: S\to \mathbb{R}\ $is a reward function which maps each state $s\in S$ to a real number indicating the reward of being in state $s$; $s_0\in S$ is the initial state; $\gamma \in [0, 1)$ is a discount factor which describes the desirability of the future rewards.
 \end{definition}
 A policy $\pi$ for an MDP $M$ induces a Discrete-Time Markov Chain (DTMC) $M_{\pi}=(S, T_\pi, s_0)$, where $T_\pi:S\times S\to [0, 1]$ is the probability of transitioning from a state $s$ to another state in one step. By making a sequence of decisions by following policy $\pi$, the agent shall traverse a trajectory $\tau = s_{t_0}\xrightarrow{T_\pi(s_{t_0}, s_{t_1})>0} s_{t_1}\xrightarrow{T_\pi(s_{t_1}, s_{t_2})>0} s_{t_2}, ...$, is a sequence of states where $s_{t_i}\in S$. The accumulated reward of such trajectory $\tau$ is $\sum_{i=0}^\infty \gamma^i R(s_{t_i})$. The value function $V_\pi: S\to \mathbb{R}$ measures the expectation of accumulated reward $E[\sum\limits_{i=0}^{\infty}\gamma^i R(s_{t_i})]$ starting from a state $s$ and following policy $\pi$. 
 
 According to \cite{bellman}, a policy $\pi$ is optimal for MDP M if:
 \begin{equation}
 \centering
-\forall s\in S, \pi(s)\in argmax_{a\in A}  \sum_{s'\in S} T(s, a, s')V_{\pi}(s')
+\forall s\in S, \pi(s)\in \underset{a\in A}{argmax}  \sum_{s'\in S} T(s, a, s')V_{\pi}(s')
 \end{equation}
 
 
