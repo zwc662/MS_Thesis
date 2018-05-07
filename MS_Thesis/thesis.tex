@@ -35,7 +35,8 @@
 \usepackage{xspace}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\usepackage[colorlinks=true,bookmarks=false]{hyperref}
+\usepackage[colorlinks=false, bookmarks=false]{hyperref}
+
 \input{macros}
   
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
@@ -50,6 +51,10 @@
  
 \theoremstyle{remark}
 \newtheorem*{remark}{Remark}
+
+\usepackage{setspace}
+\usepackage{hyperref}
+
 
 %\usepackage{psfrag}
 %\DeclareGraphicsExtensions{.eps}   % extension for included graphics
@@ -116,8 +121,11 @@
 
 %==========================================================================%
 % Curriculum Vitae
-\includepdf[page=1]{0_Prelim/cv} 
-\includepdf[page=2]{0_Prelim/cv} 
+\chapter*{\centerline{Curriculum Vitae}}
+\addcontentsline{toc}{chapter}{Curriculum Vitae}
+\input{0_Prelim/cv}
+%\includepdf[page=1]{0_Prelim/cv} 
+%\includepdf[page=2]{0_Prelim/cv} 
 
 %==========================================================================%
 \end{document}

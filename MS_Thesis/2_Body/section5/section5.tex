@@ -1,5 +1,4 @@
 %\section{Safety-aware apprenticeship learning algorithm}
-%%\vspace{-2mm}
 In this section, we introduce the Counterexample Guided Apprenticeship Learning (CEGAL)
 algorithm to solve the Safe-AL problem. 
 It can be viewed as a special case of the safety-aware learning framework described in the previous section. 
@@ -11,7 +10,14 @@ In addition to combining policy verification, counterexample generation and AL, 
 &&\quad\ \:\omega^T(\mu_{\tilde{\pi}} - \mu_{cex})\leq\omega^T(\mu_{ \tilde{\pi}'} - \mu_{cex'}),\ \forall \tilde{\pi}'\in\Pi_S, \forall cex'\in{CEX} \nonumber
 \end{eqnarray}
 
-\begin{algorithm}[htb]
+In essence, we take a weighted-sum approach for solving the multi-objective optimization problem  (\ref{eq:sec4_3}). Assuming that $\Pi_S=\{\pi_{1},$ $\pi_{2},$ $\pi_{3},$ $\ldots \}$ is a set of candidate policies that all satisfy $\Phi$, ${CEX} =\{cex_1,$ $cex_2,$ $cex_3,$ $\ldots\}$ is a set of counterexamples. We introduce a parameter $k$ and change (\ref{eq:sec4_3}) into a weighted sum optimization problem (\ref{eq:sec5_1}). Note that $\pi$ and $\tilde\pi$ can be different. The optimal $\omega$ solved from (\ref{eq:sec5_1}) can be used to generate a new policy $\pi_\omega$ by using algorithms such as policy iteration. 
+We use a probabilistic model checker, such as PRISM~\cite{kwiatkowska2002prism}, to check if $\pi_\omega$ satisfies $\Phi$. If it does, then it will be added to $\Pi_S$. Otherwise, a counterexample generator, such as COMICS~\cite{DBLP:journals/corr/abs-1206-0603}, is used to generate a (minimal) counterexample $cex_{\pi_\omega}$, which will be added to ${CEX}$.  
+
+Algorithm 1 describes CEGAL in detail. 
+With a constant $sup=1$ and a variable $inf\in[0, sup]$ for the upper and lower bounds respectively, the learner determines the value of $k$ within $[inf, sup]$ in each iteration depending on the outcome of the verifier and uses $k$ in solving (\ref{eq:sec5_1}) in line 27. 
+Like most nonlinear optimization algorithms, this algorithm requires an initial guess, which is an initial safe policy $\pi_0$ to make $\Pi_S$ nonempty. A good initial candidate would be the maximally safe policy for example obtained using PRISM-games~{\cite{Kwiatkowska2017}}. 
+Without loss of generality, we assume this policy satisfies $\Phi$. 
+\begin{algorithm}[htpb]
 \caption{Counterexample-Guided Apprenticeship Learning (CEGAL)}
 \begin{algorithmic}[1]
 \State \textbf{Input}:
@@ -34,10 +40,10 @@ In addition to combining policy verification, counterexample generation and AL, 
 \\\qquad\textbf{Learner:}
 \\\qquad\qquad \textbf{If} status = SAT
 \\\qquad\qquad\qquad \textbf{If} $||\mu_E-\mu_{\pi_i}||_2\leq \epsilon$, {\bf then return} $\pi_i$
-\\\Comment{Converge. $\pi_i$ is {$\epsilon$-close} to $\pi_E$}
+\\\Comment{Terminate. $\pi_i$ is {$\epsilon$-close} to $\pi_E$}
 \\\qquad\qquad\qquad Add $\pi_i$ to $\Pi_S$, $inf \leftarrow k, k \leftarrow sup$\Comment{Update $\Pi_S$, $inf$ and reset $k$}
 \\\qquad\qquad \textbf{If} status = UNSAT
-\\\qquad\qquad\qquad \textbf{If} $|k - inf|\leq\sigma$, {\bf then return} $\pi^*\leftarrow\underset{{\pi}\in \Pi_S}{argmin}||\mu_E - \mu_{{\pi}}||_2$\\\Comment{Converge. $k$ is too close to its lower bound. }
+\\\qquad\qquad\qquad \textbf{If} $|k - inf|\leq\sigma$, {\bf then return} $\pi^*\leftarrow\underset{{\pi}\in \Pi_S}{argmin}||\mu_E - \mu_{{\pi}}||_2$\\\Comment{Terminate. $k$ is too close to its lower bound. }
 \\\qquad\qquad\qquad $k \leftarrow \alpha\cdot inf + (1 - \alpha)k$ 
 \Comment{Decrease k to learn for safety}
 \\\qquad\qquad $\omega_{i+1} \leftarrow arg\underset{\omega}{max}\underset{\pi\in\Pi_S, \tilde{\pi}\in\Pi_S, cex\in CEX}{\min}\ \omega^T(k(\mu_E - \mu_{\pi})+(1-k)(\mu_{\tilde{\pi}}  - \mu_{cex}))$
@@ -48,20 +54,12 @@ In addition to combining policy verification, counterexample generation and AL, 
 \label{algo1}
 \end{algorithm}
 
-In essence, we take a weighted-sum approach for solving the multi-objective optimization problem  (\ref{eq:sec4_3}). Assuming that $\Pi_S=\{\pi_{1},$ $\pi_{2},$ $\pi_{3},$ $\ldots \}$ is a set of candidate policies that all satisfy $\Phi$, ${CEX} =\{cex_1,$ $cex_2,$ $cex_3,$ $\ldots\}$ is a set of counterexamples. We introduce a parameter $k$ and change (\ref{eq:sec4_3}) into a weighted sum optimization problem (\ref{eq:sec5_1}). Note that $\pi$ and $\tilde\pi$ can be different. The optimal $\omega$ solved from (\ref{eq:sec5_1}) can be used to generate a new policy $\pi_\omega$ by using algorithms such as policy iteration. 
-We use a probabilistic model checker, such as PRISM~\cite{kwiatkowska2002prism}, to check if $\pi_\omega$ satisfies $\Phi$. If it does, then it will be added to $\Pi_S$. Otherwise, a counterexample generator, such as COMICS~\cite{DBLP:journals/corr/abs-1206-0603}, is used to generate a (minimal) counterexample $cex_{\pi_\omega}$, which will be added to ${CEX}$.  
 
-Algorithm 1 describes CEGAL in detail. 
-With a constant $sup=1$ and a variable $inf\in[0, sup]$ for the upper and lower bounds respectively, the learner determines the value of $k$ within $[inf, sup]$ in each iteration depending on the outcome of the verifier and uses $k$ in solving (\ref{eq:sec5_1}) in line 27. 
-Like most nonlinear optimization algorithms, this algorithm requires an initial guess, which is an initial safe policy $\pi_0$ to make $\Pi_S$ nonempty. A good initial candidate would be the maximally safe policy for example obtained using PRISM-games~{\cite{Kwiatkowska2017}}. 
-Without loss of generality, we assume this policy satisfies $\Phi$.
-%Given the PCTL formula $\psi$ used in $\Phi$, such as $\psi::=\true\ \until^{\leq t}\ \texttt{unsafe}$ in (\ref{eq:example-spec}), PRISM-games solves $min~P_{=?}[\psi]$ and returns a \textcolor{red}{safest} policy that satisfies the minimization. 
-%If the policy satisfies $\Phi$, then $\Phi$ is proved to be satisfiable and the policy can be used as $\pi_0$ to start the iteration. 
-Suppose in iteration $i$, an intermediate policy $\pi_i$ learnt by the learner in iteration $i-1$ is verified to satisfy $\Phi$, then we increase $inf$ to $inf=k$ and reset $k$ to $k=sup$ as shown in line 22. 
+Suppose that in iteration $i$ an intermediate policy $\pi_i$ learnt by the learner in iteration $i-1$ is verified to satisfy $\Phi$, then we increase $inf$ to $inf=k$ and reset $k$ to $k=sup$ as shown in line 22. 
 If $\pi_i$ does not satisfy $\Phi$, then we reduce $k$ to $k=\alpha\cdot inf + (1 - \alpha)k$  as shown in line 26 where $\alpha\in(0, 1)$ is a step length parameter. 
 If $|k-inf|\leq\sigma$ and $\pi_i$ still does not satisfy $\Phi$, the algorithm chooses from $\Pi_S$ a best safe policy $\pi^*$ which has the smallest margin to $\pi_E$ as shown in line 24. If $\pi_i$ satisfies $\Phi$ and is {$\epsilon$-close} to $\pi_E$, the algorithm outputs $\pi_i$ as show in line 19. For the occasions when $\pi_i$ satisfies $\Phi$ and $inf = sup = k = 1$, solving (\ref{eq:sec5_1}) is equivalent to solving (\ref{eq:sec1_1}) as in the original AL algorithm.
 %%\vspace{-4mm}
-\begin{algorithm}[htb]
+\begin{algorithm}[htpb]
 \caption{Initial Safe Policy Generation}
 \begin{algorithmic}[1]
 %\State \textbf{Input}:
@@ -92,11 +90,11 @@ If $|k-inf|\leq\sigma$ and $\pi_i$ still does not satisfy $\Phi$, the algorithm 
 \\\qquad\qquad \textbf{If} status = SAT
 \\\qquad\qquad\qquad Return $\pi_i$\Comment{End iteration once a safe policy is found}
 \\\qquad\qquad \textbf{If} status = UNSAT
-\\\qquad\qquad\qquad \textbf{If} $|CEX|>1$ and $\|\frac{\underset{cex \in |CEX|}{\sum}\mu_{cex}\ \ }{|CEX|}-\frac{\mu_{cex_i} + \underset{cex \in |CEX|}{\sum}\mu_{cex}\ \ }{1 + |CEX|}\|_2\leq\epsilon$
+\\\qquad\qquad\qquad \textbf{If} $|CEX|>1$ and $\|\frac{\underset{cex \in CEX}{\sum}\mu_{cex}\ \ }{|CEX|}-\frac{\mu_{cex_i} + \underset{cex \in CEX}{\sum}\mu_{cex}\ \ }{1 + |CEX|}\|_2\leq\epsilon$
 \\\qquad\qquad\qquad\qquad  \textbf{Then} return Null\\\Comment{Fail to find a safe policy since adding a new counterexample hardly changes the centroid of existing counterexample cluster.}
 %\\\qquad\qquad $\omega_{i+1} = \underset{\omega}{argmax} \underset{\mu\in \Pi_{CEX}}{min}\ (-\omega^T\mu)$
-\\\qquad\qquad $\omega_{i+1} = arg\max_{\omega} \min_{cex\in CEX}\ (-\omega^T\mu_{cex})$
-\\\qquad\qquad $\pi_{i+1}\gets$ Optimal policy of $\omega_{i+1}$
+\\\qquad\qquad $\omega_{i+1} = \underset{\omega}{argmax} \underset{cex\in CEX}{min}\ (-\omega^T\mu_{cex})$
+\\\qquad\qquad $\pi_{i+1}\gets$ Optimal policy of $R(s)=\omega_{i+1}^Tf(s)$
 
 \\\qquad Go to next iteration
 
@@ -128,7 +126,7 @@ is always true. Hence $\pi^*$ always satisfies $\Phi$. For the second part of th
 (\pi_0\models\Phi)\wedge(||\mu_E-\mu_{\pi_0}||_2\leq\epsilon). 
 \end{equation}
 Otherwise, $\pi_0$ is added to $\Pi_S$ if it satisfies $\Phi$.  
-During the iteration, since a safe policy $\epsilon$-close to $\mu_E$ won't be added to $\Pi_S$ but directly be returned, then
+During the iteration, since a safe policy $\epsilon$-close to $\mu_E$ will not be added to $\Pi_S$ but directly be returned, then
 \begin{equation}
 (||\mu_E-\mu_{\pi}||_2\geq\epsilon, \forall\pi\in\Pi_S)\wedge\big((\pi^*=\underset{{\pi}\in\Pi_S}{argmin}||\mu_E - \mu_{{\pi}}||_2)\big)\vee(||\mu_E-\mu_{\pi^*}||_2\leq\epsilon)\big) 
 \end{equation}

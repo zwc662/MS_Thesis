@@ -1,5 +1,5 @@
 
-Algorithm 1 is guaranteed to converge. Let $inf_t$ be the $t^{th}$ assigned value of $inf$. After $inf_t$ is given, $k$ is decreased from $k_0=sup$ iteratively by $k_{i}=\alpha\cdot inf_t + (1 - \alpha)k_{i-1}$ until either $|k_i-inf_t|\leq \sigma$ in line 24 or a new safe policy is found in line 18. The update of $k$ satisfies the following equality.
+Algorithm 1 is guaranteed to terminate. Let $inf_t$ be the $t^{th}$ assigned value of $inf$. After $inf_t$ is given, $k$ is decreased from $k_0=sup$ iteratively by $k_{i}=\alpha\cdot inf_t + (1 - \alpha)k_{i-1}$ until either $|k_i-inf_t|\leq \sigma$ in line 24 or a new safe policy is found in line 19. The update of $k$ satisfies the following equality.
 %\vspace{-3mm}
 \begin{eqnarray}
 \frac{|k_{i+1} - inf_t|}{|k_i - inf_t|}&=& \frac{\alpha\cdot inf_t + (1 - \alpha)k_i - inf_t}{k_i - inf_t} =  1-\alpha
@@ -7,14 +7,14 @@ Algorithm 1 is guaranteed to converge. Let $inf_t$ be the $t^{th}$ assigned valu
 \end{eqnarray}
 %\vspace{-3mm}
 
-Thus, it takes no more than 1+$\log_{1-\alpha}\frac{\sigma}{sup - inf_t}$ iterations for either the algorithm to converge in line 24 or a new safe policy to be found in line 18. If a new safe policy is found in line 18, $inf$ will be assigned in line 22 by the current value of $k$ as $inf_{t+1}=k$ which obviously satisfies $inf_{t+1} - inf_t \geq(1-\alpha)\sigma$. After the assignment of $inf_{t+1}$, the iterative update of $k$ resumes. Since $sup-inf_t \leq 1$, the following inequality holds.
+Thus, it takes no more than 1+$\log_{1-\alpha}\frac{\sigma}{sup - inf_t}$ iterations for either the algorithm to terminate in line 24 or a new safe policy to be found in line 19. If a new safe policy is found in line 19, $inf$ will be assigned in line 22 by the current value of $k$ as $inf_{t+1}=k$ which obviously satisfies $inf_{t+1} - inf_t \geq(1-\alpha)\sigma$. After the assignment of $inf_{t+1}$, the iterative update of $k$ resumes. Since $sup-inf_t \leq 1$, the following inequality holds.
 %\vspace{-3mm}
 \begin{eqnarray}
 \frac{|inf_{t+1} - sup|}{|inf_{t} - sup|}&\leq&\frac{sup -inf_{t} - (1-\alpha)\sigma}{sup- inf_{t}}\leq 1 - (1-\alpha)\sigma
 \end{eqnarray}
 %\vspace{-3mm}
 
-Obviously, starting from an initial $inf=inf_0<sup$, with the alternating update of $inf$ and $k$, $inf$ will keep getting close to $sup$ unless the algorithm converges as in line 24 or a safe policy {$\epsilon$-close} to $\pi_E$ is found as in line 19. The extreme case is that finally $inf=sup$ after no more than $\frac{sup-inf_0}{(1-\alpha)\sigma}$ updates on $inf$. Then, the problem becomes AL. Therefore, the worst case of this algorithm can have two phases. In the first phase, $inf$ increases from $inf=0$ to $inf=sup$. Between each two consecutive updates $(t, t+1)$ on $inf$, there are no more than $\log_{1-\alpha}\frac{(1-\alpha)\sigma}{sup - inf_t}$ updates on $k$ before $inf$ is increased from $inf_t$ to $inf_{t+1}$. Overall, this phase takes no more than
+Obviously, starting from an initial $inf=inf_0<sup$, with the alternating update of $inf$ and $k$, $inf$ will keep getting close to $sup$ unless the algorithm terminates as in line 24 or a safe policy {$\epsilon$-close} to $\pi_E$ is found as in line 20. The extreme case is that finally $inf=sup$ after no more than $\frac{sup-inf_0}{(1-\alpha)\sigma}$ updates on $inf$. Then, the problem becomes AL. Therefore, the worst case of this algorithm can have two phases. In the first phase, $inf$ increases from $inf=0$ to $inf=sup$. Between each two consecutive updates $(t, t+1)$ on $inf$, there are no more than $\log_{1-\alpha}\frac{(1-\alpha)\sigma}{sup - inf_t}$ updates on $k$ before $inf$ is increased from $inf_t$ to $inf_{t+1}$. Overall, this phase takes no more than
 %\vspace{-3mm}
 \begin{equation}
 {\underset{0\leq i< \frac{sup-inf_0}{(1-\alpha)\sigma}}{\sum}\log_{1-\alpha} \frac{(1-\alpha)\sigma}{sup-inf_0-i\cdot (1-\alpha)\sigma}} = {\underset{0\leq i< \frac{1}{(1-\alpha)\sigma}}{\sum}\log_{1-\alpha} \frac{(1-\alpha)\sigma}{1-i\cdot (1-\alpha)\sigma}}
@@ -23,11 +23,11 @@ Obviously, starting from an initial $inf=inf_0<sup$, with the alternating update
 
 \noindent iterations to reduce the multi-objective optimization problem to original apprenticeship learning and then the second phase begins. Since $k=sup$, the iteration will stop immediately when an unsafe policy is learnt as in line 24. This phase will not take more iterations than original AL algorithm does to converge.
 
-The convergence analysis of AL can be found in~\cite{Abbeel:2004:ALV:1015330.1015430}. First it's assumed that the ball with radius $\epsilon$ around $\mu_E$, which is a set $\{\mu\mid d(\mu_E, \mu)\leq\epsilon\}$, will have intersection with be the convex hull of the set of feature expectations of candidate policy set $\Pi$ after $n$ iterations. Then it's provable that $n$ satisfies
+The convergence analysis of AL can be found in~\cite{Abbeel:2004:ALV:1015330.1015430}. First it is assumed that the ball with radius $\epsilon$ around $\mu_E$, which is a set $\{\mu\mid d(\mu_E, \mu)\leq\epsilon\}$, will have intersection with be the convex hull of the set of feature expectations of candidate policy set $\Pi$ after $n$ iterations. Then it is provable that $n$ satisfies
 \begin{equation}
 n\leq O\big(\frac{k}{(1-\gamma)^2\epsilon^2}\log{\frac{k}{(1-\gamma)\epsilon}}\big)
 \end{equation}
-where $k$ is the number of features, $\gamma$ is the discount factor. It's also ensured in~\cite{Abbeel:2004:ALV:1015330.1015430} that the number of sample demonstrations needed to make AL algorithm output with probability at least $1-\delta$ should suffice that
+where $k$ is the number of features, $\gamma$ is the discount factor. It is also ensured in~\cite{Abbeel:2004:ALV:1015330.1015430} that the number of sample demonstrations needed to make AL algorithm output with probability at least $1-\delta$ should suffice that
 \begin{equation}
 m\geq \frac{2k}{(1-\gamma)^2\epsilon^2}\log{\frac{2k}{\delta}}
 \end{equation}

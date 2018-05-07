@@ -1,5 +1,5 @@
 %\vspace{-1mm}
-We evaluate our algorithm on three case studies: (1) grid-world, (2) cart pole, and (3) mountain car. The cart-pole environment\footnote{\url{https://github.com/openai/gym/wiki/CartPole-v0}} and the mountain-car environment\footnote{\url{https://github.com/openai/gym/wiki/MountainCar-v0}} are obtained from OpenAI Gym. All experiments are carried out on a quad-core i7-7700K processor running at 3.6 GHz with 16 GB of memory. 
+We evaluate our algorithm on three case studies: (1) grid-world, (2) cart-pole, and (3) mountain-car. The cart-pole environment\footnote{\url{https://github.com/openai/gym/wiki/CartPole-v0}} and the mountain-car environment\footnote{\url{https://github.com/openai/gym/wiki/MountainCar-v0}} are obtained from OpenAI Gym. All experiments are carried out on a quad-core i7-7700K processor running at 3.6 GHz with 16 GB of memory. 
 Our prototype tool was implemented in Python\footnote{\url{https://github.com/zwc662/CAV2018}}.
 For the OpenAI-gym experiments, in each step, the agent sends an action to the OpenAI environment and the environment returns an observation and reward. 
 The parameters are $\gamma=0.99, \sigma=10^{-5}, \alpha=0.5$. For grid-world, $\epsilon=1E-5$, whereas for OpenAI-gym environments, $\epsilon=10$.
@@ -53,7 +53,7 @@ Our first experiment is an extension on the 2D navigation task in Section~\ref{s
 	\end{minipage}\hspace{0.012\linewidth}
 }
 \caption[Reward mappings of gridworld for different safety threshold]
-{(a)$p^* = 90\%$. The learnt policy has a probability of $12.5\%$ with respect to the given PCTL property. The reward function assigns lower rewards to the unsafe states than the states nearby. (b) $p^* = 40\%$. The learnt policy has a probability of $11.0\%$ with respect to the given PCTL property. The reward function assigns even lower rewards to the unsafe states, indicated by the greater contrast between unsafe states and other states. (c)$p^* = 10\%$. The learnt policy has a probability of $4\%$. The reward function assigns such low rewards to the unsafe states that the states nearby are also assigned with low rewards (because of the radial basis feature functions).}
+{(a)$p^* = 90\%$. The learnt policy has a probability of $12.5\%$ with respect to the given PCTL property. The reward function assigns lower rewards to the unsafe states than the states nearby. (b) $p^* = 40\%$. The learnt policy has a probability of $11.0\%$ with respect to the given PCTL property. The reward function assigns even lower rewards to the unsafe states, indicated by the greater contrast between unsafe states and other states. (c)$p^* = 10\%$. The learnt policy has a probability of $4\%$ with respect to the given PCTL property. The reward function assigns such low rewards to the unsafe states that the states nearby are also assigned with low rewards (because of the radial basis feature functions).}
 \label{fig:grid_world2}
 %\vspace{-4mm}
 \end{figure}
@@ -83,22 +83,22 @@ We also evaluated the scalability of our implementation using the grid-world exa
 \begin{figure}[hbt]
   \centering
    	\subfigure[]{
-	\begin{minipage}[c][0.5\width]{
-	   0.5\textwidth}
+	\begin{minipage}[c][0.35\textwidth]{
+	   0.45\textwidth}
 	   \includegraphics[width=\linewidth]{cartpole-v0.jpg}
 	   \label{fig:cartpole-v0}
 	\end{minipage}\hfill
 }
 \subfigure[]{
-	\begin{minipage}[c][0.5\width]{
-	   0.5\textwidth}
+	\begin{minipage}[c][0.35\textwidth]{
+	   0.45\textwidth}
 	   \includegraphics[width=\linewidth]{cartpole-v2.jpg}
 	   \label{fig:cartpole-v1}
 	\end{minipage}\hfill
 }
 \subfigure[]{
-	\begin{minipage}[c][0.5\width]{
-	   0.5\textwidth}
+	\begin{minipage}[c][0.35\textwidth]{
+	   0.45\textwidth}
 	   \includegraphics[width=\linewidth]{cartpole-v3.jpg}
 	   \label{fig:cartpole-v2}
 	\end{minipage}\hfill
@@ -164,15 +164,15 @@ It corresponds to simply letting the pole fall and thus does not risk moving the
 \begin{figure}[h]
 \centering
 \subfigure[]{
-	\hspace{0.15\linewidth}\begin{minipage}[c][0.7\width]{
-	   0.5\textwidth}
+	\hspace{0.1\linewidth}\begin{minipage}[c][0.35\textwidth]{
+	   0.45\textwidth}
 	   \includegraphics[width=1.2\linewidth]{mountaincar-v0.jpg}
 	   \label{fig:mountaincar-v0}
 	\end{minipage}\hspace{0.2\linewidth}
 }
 \subfigure[]{
-	\begin{minipage}[c][0.7\width]{
-	   0.5\textwidth}
+	\begin{minipage}[c][0.35\textwidth]{
+	   0.45\textwidth}
 	   \includegraphics[width=1.2\linewidth]{mountaincar-v2.jpg}
 	   \label{fig:mountaincar-v1}
 	\end{minipage}\hspace{0.1\linewidth}
@@ -184,7 +184,7 @@ It corresponds to simply letting the pole fall and thus does not risk moving the
 
 Our third experiment uses the mountain-car environment from OpenAI Gym. As shown in Fig. {\ref{fig:mountaincar-v0}}, a car starts from the bottom of the valley and tries to reach the mountaintop on the right as quickly as possible. In each time step the car can perform one of the three actions, accelerating to the left, coasting, and accelerating to the right. The agent fails if the step length reaches the maximum ($t=66$). The velocity and position of the car are continuous values and observable while the exact dynamics are unknown.
 
-We discretize the continuous observation space and formulate the environment as an MDP with 320 states and 3 actions. Through exploring the environment, the transition function is determined by the samples of experienced transitions. The feature vector for each state contains 2 exponential functions and 18 radial basis functions which respectively depend on the squared Euclidean distances between the current state and other 18 states which are uniformly distributed in the state space.}. In this game setting, the car cannot reach the right mountaintop by simply accelerating to the right. It has to accumulate momentum first by moving back and forth in the valley. The safety rules we enforce are shown in Fig.~{\ref{fig:mountaincar-v1}. They correspond to speed limits when the car is close to the left mountaintop or to the right mountaintop (in case it is a cliff on the other side of the mountaintop). Similar to the previous experiments, we consider only expert demonstrations that successfully reach the right mountaintop without violating any of the safety conditions. 
+We discretize the continuous observation space and formulate the environment as an MDP with 320 states and 3 actions. Through exploring the environment, the transition function is determined by the samples of experienced transitions. The feature vector for each state contains 2 exponential functions and 18 radial basis functions which respectively depend on the squared Euclidean distances between the current state and other 18 states which are uniformly distributed in the state space. In this game setting, the car cannot reach the right mountaintop by simply accelerating to the right. It has to accumulate momentum first by moving back and forth in the valley. The safety rules we enforce are shown in Fig.~{\ref{fig:mountaincar-v1}. They correspond to speed limits when the car is close to the left mountaintop or to the right mountaintop (in case it is a cliff on the other side of the mountaintop). Similar to the previous experiments, we consider only expert demonstrations that successfully reach the right mountaintop without violating any of the safety conditions. 
 The average step length of demonstrations is $40$. 
  We formalize the safety requirement in PCTL as (\ref{eq:spec2}). 
 
@@ -228,7 +228,8 @@ $p^*=10\%$ &7.6\% & $Fail$ & 0\%  & 40\\
 As shown in the first row, the policy learnt via AL has the highest probability of going over the speed limits. We observe that this policy makes the car speed up all the way to the left mountaintop to maximize its potential energy. The safest policy corresponds to simply staying in the bottom of the valley. 
 The policies learnt via CEGAL for the safety threshold $p^*$ ranges from $60\%$ to $50\%$ not only have lower probability of violating speed limits but also maintain comparable performance. However, when the safety threshold $p^*$ further decreases, the agent becomes more conservative and it takes more time for the car to finish the task. The discordances between model checking results and unsafe rates are due to the inaccurate transition function. Despite the inconsistency, the policies learnt via CEGAL still show obvious restraint in reaching unsafe states than that via AL.
 
-%\vspace{-8mm}
+\section{Discussion}
+In the three experiments, we evaluate our algorithm in different aspects. From the gridworld experiment, we observe how safety specification influences the implicit search for reward function in our algorithm. When the safety threshold decreases, lower rewards will be assigned to the unsafe states so that the optimal policy with respect to the reward function will avoid reaching those states. From cart-pole and mountain-car experiments, we observe how our algorithm guarantees the safety of the final output policy while retaining the performance of the learnt policy in the mean time. In both experiments, by learning from human demonstrations and the counterexamples for violating the safety specification, the agent not only knows how to finish the tasks but also exhibits the awareness of safety.
 
 
 

@@ -6,10 +6,12 @@ Abbeel, P. and Ng, A.~Y. (2004).
 \newblock In {\em Proceedings of the Twenty-first International Conference on
   Machine Learning}, ICML '04, pages 1--, New York, NY, USA. ACM.
 
-\bibitem[{\'A}brah{\'a}m et~al., 2010]{unknown}
-{\'A}brah{\'a}m, E., Jansen, N., Wimmer, R., Katoen, J.-P., and Becker, B.
-  (2010).
+\bibitem[Abrah{\'a}m et~al., 2010]{unknown}
+Abrah{\'a}m, E., Jansen, N., Wimmer, R., Katoen, J.-P., and Becker, B. (2010).
 \newblock Dtmc model checking by scc reduction.
+\newblock In {\em 2010 Seventh International Conference on the Quantitative 
+Evaluation of Systems (QEST)}, pages 37--46. IEEE.
+
 
 \bibitem[Alshiekh et~al., 2017]{DBLP:journals/corr/abs-1708-08611}
 Alshiekh, M., Bloem, R., Ehlers, R., K{\"{o}}nighofer, B., Niekum, S., and
@@ -26,7 +28,11 @@ Amodei, D., Olah, C., Steinhardt, J., Christiano, P., Schulman, J., and
 \bibitem[Bellman, 1957]{bellman}
 Bellman, R. (1957).
 \newblock A markovian decision process.
-\newblock 6:15.
+\newblock {\em Journal of Mathematics and Mechanics}, pages 679--684.
+
+\bibitem[Bundy, 2016]{Bundy:2017:PFA:3086243.3086264}
+Bundy, A. (2016).
+\newblock Preparing for the future of artificial intelligence.
 
 \bibitem[Fujita et~al., 1997]{fujita1997multi}
 Fujita, M., McGeer, P.~C., and Yang, J.-Y. (1997).
@@ -37,8 +43,8 @@ Fujita, M., McGeer, P.~C., and Yang, J.-Y. (1997).
 \bibitem[Gillulay and Tomlin, 2011]{gillulay2011guaranteed}
 Gillulay, J.~H. and Tomlin, C.~J. (2011).
 \newblock Guaranteed safe online learning of a bounded system.
-\newblock In {\em Intelligent Robots and Systems (IROS), 2011 IEEE/RSJ
-  International Conference on}, pages 2979--2984. IEEE.
+\newblock In {\em 2011 IEEE/RSJ International Conference on Intelligent Robots
+  and Systems (IROS)}, pages 2979--2984. IEEE.
 
 \bibitem[Han et~al., 2009]{4770111}
 Han, T., Katoen, J.~P., and Berteun, D. (2009).
@@ -54,6 +60,19 @@ Hansson, H. and Jonsson, B. (1994).
 Held, D., McCarthy, Z., Zhang, M., Shentu, F., and Abbeel, P. (2017).
 \newblock Probabilistically safe policy transfer.
 \newblock {\em CoRR}, abs/1705.05394.
+
+\bibitem[Henriques et~al., 2012]{henriques2012statistical}
+Henriques, D., Martins, J.~G., Zuliani, P., Platzer, A., and Clarke, E.~M.
+  (2012).
+\newblock Statistical model checking for markov decision processes.
+\newblock In {\em 2012 Ninth International Conference on Quantitative
+  Evaluation of Systems (QEST)}, pages 84--93. IEEE.
+
+\bibitem[Ho et~al., 2016]{ho2016model}
+Ho, J., Gupta, J., and Ermon, S. (2016).
+\newblock Model-free imitation learning with policy optimization.
+\newblock In {\em International Conference on Machine Learning}, pages
+  2760--2769.
 
 \bibitem[Jansen et~al., 2012]{DBLP:journals/corr/abs-1206-0603}
 Jansen, N., {\'{A}}brah{\'{a}}m, E., Scheffler, M., Volk, M., Vorpahl, A.,
@@ -72,6 +91,12 @@ Junges, S., Jansen, N., Dehnert, C., Topcu, U., and Katoen, J.-P. (2016).
 \newblock Safety-constrained reinforcement learning for mdps.
 \newblock In {\em International Conference on Tools and Algorithms for the
   Construction and Analysis of Systems}, pages 130--146. Springer.
+
+\bibitem[Krizhevsky et~al., 2012]{krizhevsky2012imagenet}
+Krizhevsky, A., Sutskever, I., and Hinton, G.~E. (2012).
+\newblock Imagenet classification with deep convolutional neural networks.
+\newblock In {\em Advances in neural information processing systems}, pages
+  1097--1105.
 
 \bibitem[Kuo and Mittelmann, 2004]{Kuo:2004aa}
 Kuo, Y.-J. and Mittelmann, H.~D. (2004).
@@ -97,16 +122,36 @@ Kwiatkowska, M., Parker, D., and Wiltsche, C. (2017).
 \newblock {\em International Journal on Software Tools for Technology
   Transfer}.
 
+\bibitem[Levinson et~al., 2011]{levinson2011towards}
+Levinson, J., Askeland, J., Becker, J., Dolson, J., Held, D., Kammel, S.,
+  Kolter, J.~Z., Langer, D., Pink, O., Pratt, V., et~al. (2011).
+\newblock Towards fully autonomous driving: Systems and algorithms.
+\newblock In {\em 2011 IEEE Intelligent Vehicles Symposium (IV)}, pages
+  163--168. IEEE.
+
 \bibitem[Mason et~al., 2017]{mason2017assured}
 Mason, G.~R., Calinescu, R.~C., Kudenko, D., and Banks, A. (2017).
 \newblock Assured reinforcement learning for safety-critical applications.
 \newblock In {\em Doctoral Consortium at the 10th International Conference on
   Agents and Artificial Intelligence}. SciTePress.
 
+\bibitem[Mnih et~al., 2015]{mnih2015human}
+Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A.~A., Veness, J., Bellemare,
+  M.~G., Graves, A., Riedmiller, M., Fidjeland, A.~K., Ostrovski, G., et~al.
+  (2015).
+\newblock Human-level control through deep reinforcement learning.
+\newblock {\em Nature}, 518(7540):529--533.
+
 \bibitem[Moldovan and Abbeel, 2012]{moldovan2012safe}
 Moldovan, T.~M. and Abbeel, P. (2012).
 \newblock Safe exploration in markov decision processes.
 \newblock {\em arXiv preprint arXiv:1205.4810}.
+
+\bibitem[Neu and Szepesv{\'a}ri, 2012]{neu2012apprenticeship}
+Neu, G. and Szepesv{\'a}ri, C. (2012).
+\newblock Apprenticeship learning using inverse reinforcement learning and
+  gradient methods.
+\newblock {\em arXiv preprint arXiv:1206.5264}.
 
 \bibitem[Ng and Russell, 2000]{Ng:2000:AIR:645529.657801}
 Ng, A.~Y. and Russell, S.~J. (2000).
@@ -133,8 +178,8 @@ Ratliff, N.~D., Bagnell, J.~A., and Zinkevich, M.~A. (2006).
 Sadigh, D., Kim, E.~S., Coogan, S., Sastry, S.~S., and Seshia, S.~A. (2014).
 \newblock A learning based approach to control synthesis of markov decision
   processes for linear temporal logic specifications.
-\newblock In {\em Decision and Control (CDC), 2014 IEEE 53rd Annual Conference
-  on}, pages 1091--1096. IEEE.
+\newblock In {\em 2014 IEEE 53rd Annual Conference on Decision and Control
+  (CDC)}, pages 1091--1096. IEEE.
 
 \bibitem[Shiarlis et~al., 2016]{shiarlis2016inverse}
 Shiarlis, K., Messias, J., and Whiteson, S. (2016).
@@ -146,7 +191,7 @@ Shiarlis, K., Messias, J., and Whiteson, S. (2016).
 \bibitem[Solar-Lezama et~al., 2006]{CEGIS}
 Solar-Lezama, A., Tancau, L., Bodik, R., Seshia, S., and Saraswat, V. (2006).
 \newblock Combinatorial sketching for finite programs.
-\newblock {\em SIGOPS Oper. Syst. Rev.}, 40(5):404--415.
+\newblock pages 404--415.
 
 \bibitem[Wimmer et~al., 2012]{Wimmer2012}
 Wimmer, R., Jansen, N., {\'A}brah{\'a}m, E., Becker, B., and Katoen, J.-P.
@@ -154,6 +199,20 @@ Wimmer, R., Jansen, N., {\'A}brah{\'a}m, E., Becker, B., and Katoen, J.-P.
 \newblock {\em Minimal Critical Subsystems for Discrete-Time Markov Models},
   pages 299--314.
 \newblock Springer Berlin Heidelberg, Berlin, Heidelberg.
+
+\bibitem[Younes et~al., 2011]{10.1007/978-3-642-19829-8_10}
+Younes, H. L.~S., Clarke, E.~M., and Zuliani, P. (2011).
+\newblock Statistical verification of probabilistic properties with unbounded
+  until.
+\newblock In Davies, J., Silva, L., and Simao, A., editors, {\em Formal
+  Methods: Foundations and Applications}, pages 144--160, Berlin, Heidelberg.
+  Springer Berlin Heidelberg.
+
+\bibitem[Younes and Simmons, 2006]{Younes:2006:SPM:1182767.1182770}
+Younes, H. L.~S. and Simmons, R.~G. (2006).
+\newblock Statistical probabilistic model checking with a focus on time-bounded
+  properties.
+\newblock {\em Inf. Comput.}, 204(9):1368--1409.
 
 \bibitem[Ziebart et~al., 2008]{Ziebart:2008:MEI:1620270.1620297}
 Ziebart, B.~D., Maas, A., Bagnell, J.~A., and Dey, A.~K. (2008).
